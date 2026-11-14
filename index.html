@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0b0f14" />
+<meta name="color-scheme" content="dark" />
+<title>Trading Checklist</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --card-1: #151b24;
+    --card-2: #11161d;
+    --border: #263041;
+    --line: #1e2632;
+    --text: #e6edf3;
+    --muted: #8b98a9;
+    --green: #2ea043;
+    --green-bright: #3fb950;
+    --red: #da3633;
+    --red-bright: #f85149;
+    --blue: #1f6feb;
+    --blue-bright: #388bfd;
+
+    --check: 38px;
+    --panel-w: 820px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(1100px 550px at 50% -15%, #17202c 0%, rgba(11,15,20,0) 65%),
+      var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overscroll-behavior-y: none;
+  }
+
+  /* ---------------------------------------------------------
+     Header
+     --------------------------------------------------------- */
+
+  .header {
+    max-width: var(--panel-w);
+    margin: 0 auto;
+    padding: 28px 24px 16px;
+  }
+
+  .header h1 {
+    margin: 0 0 6px;
+    font-size: 1.32rem;
+    letter-spacing: .02em;
+    font-weight: 700;
+  }
+
+  .header p {
+    margin: 0;
+    font-size: .84rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .header p b { color: #b9c6d6; font-weight: 600; }
+
+  /* ---------------------------------------------------------
+     Sticky top: add bar + tab bar
+     --------------------------------------------------------- */
+
+  .sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgba(11, 15, 20, .92);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .toolbar {
+    max-width: var(--panel-w);
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .select-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .select-wrap::after {
+    content: "";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid #7a8899;
+    border-bottom: 2px solid #7a8899;
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .select-wrap select {
+    width: 100%;
+    height: 48px;
+    padding: 0 44px 0 14px;
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    background: #11161d;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+
+  .select-wrap select.is-placeholder { color: #5d6a7c; }
+
+  .select-wrap select:focus-visible {
+    border-color: var(--blue-bright);
+    box-shadow: 0 0 0 3px rgba(31, 111, 235, .2);
+  }
+
+  .select-wrap select option { color: var(--text); background: #11161d; }
+  .select-wrap select optgroup { color: #7a8899; background: #11161d; font-style: normal; }
+
+  .btn-add {
+    flex: none;
+    height: 48px;
+    padding: 0 20px;
+    border-radius: 11px;
+    border: 1px solid var(--blue-bright);
+    background: var(--blue);
+    color: #fff;
+    font-family: inherit;
+    font-size: .88rem;
+    font-weight: 700;
+    letter-spacing: .01em;
+    cursor: pointer;
+    transition: background .15s, opacity .15s, transform .08s;
+  }
+
+  .btn-add:hover:not(:disabled) { background: var(--blue-bright); }
+  .btn-add:active:not(:disabled) { transform: scale(.975); }
+  .btn-add:focus-visible { outline: 2px solid #79b8ff; outline-offset: 2px; }
+
+  .btn-add:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+    border-color: var(--border);
+    background: #1a212b;
+    color: #7a8899;
+  }
+
+  /* ---------------------------------------------------------
+     Tab bar (horizontal scroll on mobile)
+     --------------------------------------------------------- */
+
+  .tabbar-outer {
+    border-top: 1px solid var(--line);
+  }
+
+  .tabbar-outer[hidden] { display: none; }
+
+  .tabbar-row {
+    max-width: var(--panel-w);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 16px;
+  }
+
+  .tabbar {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 8px;
+    padding: 10px 0 10px 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-inline: 24px;
+  }
+
+  .tabbar::-webkit-scrollbar { display: none; }
+
+  .tab-count {
+    flex: none;
+    font-size: .7rem;
+    font-weight: 700;
+    color: #7a8899;
+    background: #1a212b;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 9px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    letter-spacing: .03em;
+  }
+
+  .tab-count[hidden] { display: none; }
+
+  .tab {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #141a22;
+    color: #b9c6d6;
+    font-family: inherit;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background .15s, border-color .15s, color .15s, transform .08s;
+  }
+
+  .tab:hover {
+    background: #1a212b;
+    border-color: #3c4a5f;
+    color: #e6edf3;
+  }
+
+  .tab:active { transform: scale(.97); }
+  .tab:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  .tab.is-active {
+    background: var(--blue);
+    border-color: var(--blue-bright);
+    color: #fff;
+  }
+
+  .tab.is-complete {
+    border-color: rgba(46, 160, 67, .55);
+    color: var(--green-bright);
+  }
+
+  .tab.is-complete:hover {
+    background: rgba(46, 160, 67, .12);
+    color: var(--green-bright);
+  }
+
+  .tab.is-complete.is-active {
+    background: var(--green);
+    border-color: var(--green-bright);
+    color: #fff;
+  }
+
+  .tab__count {
+    font-size: .7rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .08);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+
+  .tab.is-active .tab__count { background: rgba(255, 255, 255, .22); }
+
+  /* ---------------------------------------------------------
+     Panels area
+     --------------------------------------------------------- */
+
+  .panels {
+    max-width: var(--panel-w);
+    margin: 0 auto;
+    padding: 20px 24px calc(48px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------------------------------------------------------
+     Empty state
+     --------------------------------------------------------- */
+
+  .empty {
+    max-width: var(--panel-w);
+    margin: 20px auto;
+    padding: 56px 24px;
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    text-align: center;
+    color: var(--muted);
+    background: rgba(255, 255, 255, .015);
+  }
+
+  .empty[hidden] { display: none; }
+
+  .empty strong {
+    display: block;
+    color: #c9d5e3;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .empty span { font-size: .85rem; line-height: 1.6; }
+
+  /* ---------------------------------------------------------
+     Card / tab panel
+     --------------------------------------------------------- */
+
+  .card {
+    background: linear-gradient(180deg, var(--card-1), var(--card-2));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
+  }
+
+  .card.is-hidden { display: none; }
+
+  .card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .card__title {
+    margin: 0;
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    overflow-wrap: anywhere;
+  }
+
+  .card__head-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+  }
+
+  .card__count {
+    font-size: .74rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: #1a212b;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+  }
+
+  .card__count.is-full {
+    color: var(--green-bright);
+    border-color: rgba(46, 160, 67, .55);
+  }
+
+  .btn-remove {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #6f7d8f;
+    font-size: .78rem;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+
+  .btn-remove:hover {
+    background: rgba(218, 54, 51, .14);
+    border-color: rgba(218, 54, 51, .45);
+    color: var(--red-bright);
+  }
+
+  .btn-remove:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  /* ---------------------------------------------------------
+     Checklist rows
+     --------------------------------------------------------- */
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .item:last-child { border-bottom: 0; }
+
+  .item:has(+ .item--sub.is-hidden) { border-bottom: 0; }
+
+  .item__num {
+    flex: none;
+    width: 15px;
+    font-size: .75rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .item__text {
+    flex: 1;
+    min-width: 0;
+    font-size: .875rem;
+    line-height: 1.4;
+    color: #cfd8e3;
+    overflow-wrap: anywhere;
+  }
+
+  .actions {
+    flex: none;
+    display: flex;
+    gap: 6px;
+  }
+
+  .btn-check {
+    width: var(--check);
+    height: var(--check);
+    flex: none;
+    border-radius: 10px;
+    border: 1px solid #2b3546;
+    background: #1a212b;
+    color: #6f7d8f;
+    font-size: .84rem;
+    font-weight: 700;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background .15s, border-color .15s, color .15s, opacity .15s, transform .08s;
+  }
+
+  .btn-check--arrow {
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  /* Text variant (Profit / Lost) */
+  .btn-check--text {
+    width: auto;
+    min-width: 62px;
+    padding: 0 11px;
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+
+  .btn-check:hover:not(:disabled) {
+    border-color: #3c4a5f;
+    color: #c9d5e3;
+  }
+
+  .btn-check:active:not(:disabled) { transform: scale(.92); }
+  .btn-check:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  .btn-check--yes.active {
+    background: rgba(46, 160, 67, .18);
+    border-color: var(--green);
+    color: var(--green-bright);
+    box-shadow: inset 0 0 0 1px rgba(46, 160, 67, .3);
+  }
+
+  .btn-check--no.active {
+    background: rgba(218, 54, 51, .16);
+    border-color: var(--red);
+    color: var(--red-bright);
+    box-shadow: inset 0 0 0 1px rgba(218, 54, 51, .3);
+  }
+
+  .btn-check:disabled {
+    opacity: .22;
+    cursor: not-allowed;
+    background: #151a21;
+    border-color: #222a36;
+    color: #55606e;
+    box-shadow: none;
+  }
+
+  /* ---------------------------------------------------------
+     Nested sub-checkpoint row
+     --------------------------------------------------------- */
+
+  .item--sub {
+    position: relative;
+    padding-left: 26px;
+    animation: subIn .18s ease-out;
+  }
+
+  .item--sub::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    bottom: 7px;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, rgba(56, 139, 253, .6), rgba(56, 139, 253, .15));
+  }
+
+  .item--sub .item__num {
+    width: auto;
+    min-width: 22px;
+    font-size: .7rem;
+    color: #7a8899;
+    text-align: left;
+  }
+
+  .item--sub .item__text {
+    font-size: .84rem;
+    color: #b9c6d6;
+  }
+
+  .item--sub.is-hidden { display: none; }
+
+  @keyframes subIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------------------------------------------------------
+     Card footer
+     --------------------------------------------------------- */
+
+  .card__foot {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+
+  .btn {
+    border-radius: 11px;
+    border: 1px solid transparent;
+    font-family: inherit;
+    font-size: .84rem;
+    font-weight: 700;
+    padding: 11px 16px;
+    min-height: 46px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background .15s, border-color .15s, color .15s, transform .08s;
+  }
+
+  .btn:active { transform: scale(.985); }
+  .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  .btn--copy {
+    flex: 1;
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue-bright);
+  }
+
+  .btn--copy:hover { background: var(--blue-bright); }
+  .btn--copy.is-ok  { background: var(--green); border-color: var(--green-bright); }
+  .btn--copy.is-err { background: var(--red);   border-color: var(--red-bright); }
+
+  .btn--reset {
+    background: #1a212b;
+    border-color: var(--border);
+    color: #9aa8b8;
+  }
+
+  .btn--reset:hover { background: #202834; color: #cfd8e3; }
+
+  /* ---------------------------------------------------------
+     Toast
+     --------------------------------------------------------- */
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: translate(-50%, 14px);
+    max-width: calc(100vw - 32px);
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: #1c2431;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: .85rem;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, .5);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+
+  .toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .toast.is-error {
+    border-color: rgba(218, 54, 51, .65);
+    color: #ffb4b0;
+  }
+
+  /* ---------------------------------------------------------
+     Mobile tuning
+     --------------------------------------------------------- */
+
+  @media (max-width: 640px) {
+    :root { --check: 42px; }
+
+    .header { padding: 20px 16px 12px; }
+    .header h1 { font-size: 1.15rem; }
+    .header p { font-size: .8rem; }
+
+    .toolbar { padding: 10px 16px; }
+
+    .tabbar-row { padding-right: 14px; }
+    .tabbar { padding: 9px 0 9px 16px; scroll-padding-inline: 16px; }
+
+    .panels { padding: 14px 16px calc(40px + env(safe-area-inset-bottom)); }
+
+    .empty { margin: 14px 16px; padding: 44px 18px; }
+
+    .card { padding: 14px 14px 14px; border-radius: 14px; }
+    .card__title { font-size: .98rem; }
+    .item { padding: 8px 0; gap: 8px; }
+    .item__text { font-size: .85rem; }
+    .item__num { width: 14px; font-size: .72rem; }
+    .btn-remove { width: 36px; height: 36px; }
+
+    .btn-check--arrow { font-size: 1.18rem; }
+    .btn-check--text { min-width: 64px; font-size: .74rem; }
+
+    .item--sub { padding-left: 20px; }
+    .item--sub::before { left: 4px; top: 5px; bottom: 5px; }
+    .item--sub .item__text { font-size: .82rem; }
+    .item--sub .item__num { min-width: 20px; }
+  }
+
+  @media (max-width: 360px) {
+    .item__text { font-size: .82rem; }
+    .btn-add { padding: 0 14px; }
+    .btn-check--text { min-width: 58px; padding: 0 8px; font-size: .72rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>Trading Checklist</h1>
+   
+  </header>
+
+  <!-- Sticky: add bar + tab strip -->
+  <div class="sticky-top">
+    <form class="toolbar" id="addForm" autocomplete="off">
+      <div class="select-wrap">
+        <select id="pairSelect" aria-label="Select a currency pair">
+          <option value="" selected disabled>Select a pair…</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-add" id="addBtn" disabled>Add</button>
+    </form>
+
+    <div class="tabbar-outer" id="tabbarOuter" hidden>
+      <div class="tabbar-row">
+        <div class="tabbar" id="tabbar" role="tablist" aria-label="Checklist sections"></div>
+        <span class="tab-count" id="tabCount" hidden></span>
+      </div>
+    </div>
+  </div>
+
+  <main class="panels" id="panels"></main>
+
+  <div class="empty" id="empty">
+    <strong>No sections yet</strong>
+    <span>Choose a pair from the dropdown above and tap <b>Add</b>. You can add the same pair several times — each one gets its own tab with independent answers.</span>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------------------------------------------------
+     Configuration
+     --------------------------------------------------------- */
+
+  // type:    "binary"    -> ✔ / ✕
+  //          "direction" -> ▲ / ▼
+  // sub:      nested checkpoint revealed when this row is "yes"
+  // subType:  "binary" (default) -> ✔ / ✕
+  //           "outcome"           -> Profit / Lost
+  var CHECKS = [
+    { text: "Market Structure", type: "direction" },
+    { text: "BOS/CHoCH with 3 candles" },
+    { text: "BOS/CHoCH with imbalance" },
+    { text: "BOS/CHoCH with displacement" },
+    { text: "Structural liquidity sweep before OB" },
+    { text: "OB in correct side of the fib (discount for buy. premium for sell)" },
+    { text: "OB is supported with Volume POI/VAs" },
+    { text: "Session liquidity available around",
+      sub: "Session liquidity sweep" },
+    { text: "OB entry at 0.236 of the OB" },
+    { text: "Trade taken",
+      sub: "Trade result",
+      subType: "outcome" }
+  ];
+
+  var PAIR_GROUPS = [
+    {
+      group: "Majors",
+      pairs: ["EURUSD", "GBPUSD", "USDJPY"]
+    },/*
+    {
+      group: "Crosses",
+      pairs: [
+        "EURGBP", "EURJPY", "EURCHF", "EURAUD", "EURNZD", "EURCAD",
+        "GBPJPY", "GBPCHF", "GBPAUD", "GBPCAD", "GBPNZD",
+        "AUDJPY", "AUDCAD", "AUDCHF", "AUDNZD",
+        "NZDJPY", "NZDCAD", "NZDCHF",
+        "CADJPY", "CADCHF", "CHFJPY"
+      ]
+    },*/
+    {
+      group: "Metals",
+      pairs: ["XAUUSD"]
+    }
+  ];
+
+  var MARK = {
+    yes:  "\u2705\uFE0F",   // ✅️
+    no:   "\u274C\uFE0F",   // ❌️
+    up:   "\u2B06\uFE0F",   // ⬆️
+    down: "\u2B07\uFE0F",   // ⬇️
+    none: "\u2B1C",         // ⬜
+    profit: "🟢 Profit",
+    lost:   "🔴 Lost"
+  };
+
+  var TOTAL = CHECKS.length;
+
+  // Every nested checkpoint (a parent can have at most one)
+  var SUBS = [];
+  CHECKS.forEach(function (c, i) {
+    if (c.sub) SUBS.push({ parentIndex: i, type: c.subType || "binary" });
+  });
+
+  /* ---------------------------------------------------------
+     State
+     --------------------------------------------------------- */
+
+  var sections     = [];
+  var sectionsById = Object.create(null);
+  var cardsById    = Object.create(null);
+  var tabEls       = Object.create(null);
+  var nextId       = 1;
+  var activeId     = null;
+
+  /* ---------------------------------------------------------
+     DOM references
+     --------------------------------------------------------- */
+
+  var panels      = document.getElementById("panels");
+  var emptyEl     = document.getElementById("empty");
+  var tabbar      = document.getElementById("tabbar");
+  var tabbarOuter = document.getElementById("tabbarOuter");
+  var tabCount    = document.getElementById("tabCount");
+  var form        = document.getElementById("addForm");
+  var select      = document.getElementById("pairSelect");
+  var addBtn      = document.getElementById("addBtn");
+  var toastEl     = document.getElementById("toast");
+
+  /* ---------------------------------------------------------
+     Dropdown
+     --------------------------------------------------------- */
+
+  PAIR_GROUPS.forEach(function (group) {
+    var og = document.createElement("optgroup");
+    og.label = group.group;
+
+    group.pairs.forEach(function (pair) {
+      var opt = document.createElement("option");
+      opt.value = pair;
+      opt.textContent = pair;
+      og.appendChild(opt);
+    });
+
+    select.appendChild(og);
+  });
+
+  /* ---------------------------------------------------------
+     Add-bar state
+     --------------------------------------------------------- */
+
+  function updateAddState() {
+    var hasValue = !!select.value;
+    addBtn.disabled = !hasValue;
+    select.classList.toggle("is-placeholder", !hasValue);
+  }
+
+  function resetSelect() {
+    select.value = "";
+    updateAddState();
+  }
+
+  select.addEventListener("change", updateAddState);
+
+  /* ---------------------------------------------------------
+     Add section
+     --------------------------------------------------------- */
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var name = select.value;
+    if (!name) {
+      showToast("Select a pair first.", true);
+      return;
+    }
+
+    var section = addSection(name);
+    resetSelect();
+
+    showToast(
+      section.label + " added \u00B7 " +
+      sections.length + (sections.length === 1 ? " tab" : " tabs")
+    );
+  });
+
+  function addSection(name) {
+    var section = {
+      id: nextId++,
+      name: name,
+      label: name,
+      values: CHECKS.map(function () { return null; }),
+      subValues: CHECKS.map(function () { return null; })
+    };
+
+    sections.push(section);
+    sectionsById[section.id] = section;
+
+    var card = buildCard(section);
+    cardsById[section.id] = card;
+    panels.appendChild(card);
+
+    var tab = buildTab(section);
+    tabEls[section.id] = tab;
+    tabbar.appendChild(tab);
+
+    tabbarOuter.hidden = false;
+    emptyEl.hidden = true;
+    updateTabCount();
+
+    refreshLabels();
+
+    render(section.id);
+    activate(section.id);
+
+    return section;
+  }
+
+  function removeSection(id) {
+    var section = sectionsById[id];
+    if (!section) return;
+
+    var answered = section.values.some(function (v) { return v !== null; });
+    if (answered) {
+      var ok = window.confirm(
+        'Remove "' + section.label + '"?\nIts checklist answers will be lost.'
+      );
+      if (!ok) return;
+    }
+
+    var idx = sections.findIndex(function (s) { return s.id === id; });
+    var neighbour = sections[idx + 1] || sections[idx - 1] || null;
+
+    var card = cardsById[id];
+    if (card && card.parentNode) card.parentNode.removeChild(card);
+    delete cardsById[id];
+
+    var tab = tabEls[id];
+    if (tab && tab.parentNode) tab.parentNode.removeChild(tab);
+    delete tabEls[id];
+
+    delete sectionsById[id];
+    sections = sections.filter(function (s) { return s.id !== id; });
+
+    updateTabCount();
+
+    if (sections.length === 0) {
+      activeId = null;
+      tabbarOuter.hidden = true;
+      emptyEl.hidden = false;
+      updateAddState();
+      return;
+    }
+
+    refreshLabels();
+
+    if (activeId === id) {
+      activate(neighbour ? neighbour.id : sections[0].id);
+    }
+
+    updateAddState();
+  }
+
+  function updateTabCount() {
+    if (sections.length > 1) {
+      tabCount.hidden = false;
+      tabCount.textContent = sections.length + " tabs";
+    } else {
+      tabCount.hidden = true;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     Duplicate-aware labels
+     --------------------------------------------------------- */
+
+  function refreshLabels() {
+    var counts = Object.create(null);
+    sections.forEach(function (s) {
+      counts[s.name] = (counts[s.name] || 0) + 1;
+    });
+
+    var seen = Object.create(null);
+
+    sections.forEach(function (s) {
+      var label;
+      if (counts[s.name] > 1) {
+        seen[s.name] = (seen[s.name] || 0) + 1;
+        label = s.name + " #" + seen[s.name];
+      } else {
+        label = s.name;
+      }
+
+      s.label = label;
+
+      var tab = tabEls[s.id];
+      if (tab) {
+        var nameEl = tab.querySelector(".tab__name");
+        if (nameEl) nameEl.textContent = label;
+        tab.setAttribute("aria-label", label + " checklist");
+      }
+
+      var card = cardsById[s.id];
+      if (card) {
+        var titleEl = card.querySelector(".card__title");
+        if (titleEl) titleEl.textContent = label;
+        card.setAttribute("aria-label", label + " checklist");
+
+        var removeBtn = card.querySelector("[data-remove]");
+        if (removeBtn) {
+          removeBtn.title = "Remove " + label;
+          removeBtn.setAttribute("aria-label", "Remove " + label);
+        }
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------
+     Tabs
+     --------------------------------------------------------- */
+
+  function buildTab(section) {
+    var tab = document.createElement("button");
+    tab.type = "button";
+    tab.className = "tab";
+    tab.id = "tab-" + section.id;
+    tab.dataset.id = String(section.id);
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-controls", "panel-" + section.id);
+    tab.setAttribute("aria-selected", "false");
+    tab.setAttribute("aria-label", section.name + " checklist");
+    tab.tabIndex = -1;
+
+    tab.innerHTML =
+      '<span class="tab__name">' + escapeHtml(section.name) + "</span>" +
+      '<span class="tab__count">0/' + TOTAL + "</span>";
+
+    return tab;
+  }
+
+  function activate(id) {
+    if (!sectionsById[id]) return;
+
+    activeId = id;
+
+    sections.forEach(function (s) {
+      var isActive = s.id === id;
+
+      var tab = tabEls[s.id];
+      if (tab) {
+        tab.classList.toggle("is-active", isActive);
+        tab.setAttribute("aria-selected", String(isActive));
+        tab.tabIndex = isActive ? 0 : -1;
+      }
+
+      var card = cardsById[s.id];
+      if (card) card.classList.toggle("is-hidden", !isActive);
+    });
+
+    scrollTabIntoView(tabEls[id]);
+  }
+
+  function scrollTabIntoView(tabEl) {
+    if (!tabEl) return;
+
+    var pad = 12;
+    var tabRect = tabEl.getBoundingClientRect();
+    var barRect = tabbar.getBoundingClientRect();
+
+    if (tabRect.left < barRect.left + pad) {
+      tabbar.scrollBy({
+        left: tabRect.left - barRect.left - pad,
+        behavior: "smooth"
+      });
+    } else if (tabRect.right > barRect.right - pad) {
+      tabbar.scrollBy({
+        left: tabRect.right - barRect.right + pad,
+        behavior: "smooth"
+      });
+    }
+  }
+
+  tabbar.addEventListener("click", function (event) {
+    var tab = event.target.closest(".tab");
+    if (!tab) return;
+    activate(Number(tab.dataset.id));
+  });
+
+  tabbar.addEventListener("keydown", function (event) {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+
+    var ids = sections.map(function (s) { return s.id; });
+    var idx = ids.indexOf(activeId);
+    if (idx < 0) return;
+
+    event.preventDefault();
+
+    var nextIdx =
+      event.key === "ArrowRight"
+        ? (idx + 1) % ids.length
+        : (idx - 1 + ids.length) % ids.length;
+
+    activate(ids[nextIdx]);
+    tabEls[ids[nextIdx]].focus();
+  });
+
+  /* ---------------------------------------------------------
+     Card construction
+     --------------------------------------------------------- */
+
+  function optionConfig(check) {
+    if (check.type === "direction") {
+      return {
+        arrow: true,
+        yes: "\u25B2",
+        no:  "\u25BC",
+        yesTitle: "Bullish (up)",
+        noTitle:  "Bearish (down)"
+      };
+    }
+    return {
+      arrow: false,
+      yes: "\u2714",
+      no:  "\u2715",
+      yesTitle: "Met",
+      noTitle:  "Not met"
+    };
+  }
+
+  function buildSubRow(check, i) {
+    var isOutcome = check.subType === "outcome";
+
+    var subLi = document.createElement("li");
+    subLi.className = "item item--sub is-hidden";
+    subLi.dataset.subFor = String(i);
+
+    var yesLabel = isOutcome ? "Profit" : "\u2714";
+    var noLabel  = isOutcome ? "Lost"   : "\u2715";
+    var yesTitle = isOutcome ? "Profit" : "Met";
+    var noTitle  = isOutcome ? "Lost"   : "Not met";
+    var textCls  = isOutcome ? " btn-check--text" : "";
+
+    subLi.innerHTML =
+      '<span class="item__num">' + (i + 1) + "a</span>" +
+      '<span class="item__text">' + escapeHtml(check.sub) + "</span>" +
+      '<span class="actions">' +
+        '<button type="button" class="btn-check btn-check--yes' + textCls +
+          '" data-sub="1" data-idx="' + i + '" data-val="yes" title="' + yesTitle +
+          '" aria-label="' + yesTitle + '" aria-pressed="false">' + yesLabel + "</button>" +
+        '<button type="button" class="btn-check btn-check--no' + textCls +
+          '" data-sub="1" data-idx="' + i + '" data-val="no" title="' + noTitle +
+          '" aria-label="' + noTitle + '" aria-pressed="false">' + noLabel + "</button>" +
+      "</span>";
+
+    return subLi;
+  }
+
+  function buildCard(section) {
+    var card = document.createElement("section");
+    card.className = "card is-hidden";
+    card.id = "panel-" + section.id;
+    card.dataset.id = String(section.id);
+    card.setAttribute("role", "tabpanel");
+    card.setAttribute("aria-labelledby", "tab-" + section.id);
+    card.setAttribute("tabindex", "0");
+
+    var head = document.createElement("div");
+    head.className = "card__head";
+
+    var title = document.createElement("h2");
+    title.className = "card__title";
+    title.textContent = section.name;
+
+    var right = document.createElement("div");
+    right.className = "card__head-right";
+
+    var count = document.createElement("span");
+    count.className = "card__count";
+    count.setAttribute("data-count", "");
+
+    var remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "btn-remove";
+    remove.setAttribute("data-remove", "");
+    remove.title = "Remove " + section.name;
+    remove.setAttribute("aria-label", "Remove " + section.name);
+    remove.textContent = "\u2715";
+
+    right.appendChild(count);
+    right.appendChild(remove);
+    head.appendChild(title);
+    head.appendChild(right);
+
+    var list = document.createElement("ul");
+    list.className = "list";
+
+    CHECKS.forEach(function (check, i) {
+      var cfg = optionConfig(check);
+
+      var li = document.createElement("li");
+      li.className = "item";
+      li.innerHTML =
+        '<span class="item__num">' + (i + 1) + "</span>" +
+        '<span class="item__text">' + escapeHtml(check.text) + "</span>" +
+        '<span class="actions">' +
+          '<button type="button" class="btn-check btn-check--yes' +
+            (cfg.arrow ? " btn-check--arrow" : "") +
+            '" data-idx="' + i + '" data-val="yes" title="' + cfg.yesTitle +
+            '" aria-label="' + cfg.yesTitle + '" aria-pressed="false">' + cfg.yes + "</button>" +
+          '<button type="button" class="btn-check btn-check--no' +
+            (cfg.arrow ? " btn-check--arrow" : "") +
+            '" data-idx="' + i + '" data-val="no" title="' + cfg.noTitle +
+            '" aria-label="' + cfg.noTitle + '" aria-pressed="false">' + cfg.no + "</button>" +
+        "</span>";
+      list.appendChild(li);
+
+      if (check.sub) {
+        list.appendChild(buildSubRow(check, i));
+      }
+    });
+
+    var foot = document.createElement("div");
+    foot.className = "card__foot";
+    foot.innerHTML =
+      '<button type="button" class="btn btn--copy" data-copy>Copy checklist</button>' +
+      '<button type="button" class="btn btn--reset" data-reset>Reset</button>';
+
+    card.appendChild(head);
+    card.appendChild(list);
+    card.appendChild(foot);
+
+    return card;
+  }
+
+  /* ---------------------------------------------------------
+     Delegated clicks
+     --------------------------------------------------------- */
+
+  panels.addEventListener("click", function (event) {
+    var card = event.target.closest(".card");
+    if (!card) return;
+
+    var id = Number(card.dataset.id);
+
+    var checkBtn = event.target.closest(".btn-check");
+    if (checkBtn) {
+      if (checkBtn.dataset.sub === "1") handleSubCheck(id, checkBtn);
+      else handleCheck(id, checkBtn);
+      return;
+    }
+
+    var copyBtn = event.target.closest("[data-copy]");
+    if (copyBtn) { copyChecklist(id, copyBtn); return; }
+
+    var resetBtn = event.target.closest("[data-reset]");
+    if (resetBtn) {
+      var section = sectionsById[id];
+      if (!section) return;
+      section.values = CHECKS.map(function () { return null; });
+      section.subValues = CHECKS.map(function () { return null; });
+      render(id);
+      return;
+    }
+
+    var removeBtn = event.target.closest("[data-remove]");
+    if (removeBtn) { removeSection(id); }
+  });
+
+  function handleCheck(id, btn) {
+    if (btn.disabled) return;
+
+    var section = sectionsById[id];
+    if (!section) return;
+
+    var idx = Number(btn.dataset.idx);
+    var val = btn.dataset.val;
+    var current = section.values[idx];
+
+    section.values[idx] = (current === val) ? null : val;
+    render(id);
+  }
+
+  function handleSubCheck(id, btn) {
+    if (btn.disabled) return;
+
+    var section = sectionsById[id];
+    if (!section) return;
+
+    var idx = Number(btn.dataset.idx);
+    if (section.values[idx] !== "yes") return;
+
+    var val = btn.dataset.val;
+    var current = section.subValues[idx];
+
+    section.subValues[idx] = (current === val) ? null : val;
+    render(id);
+  }
+
+  /* ---------------------------------------------------------
+     Counters
+     --------------------------------------------------------- */
+
+  function subVisible(section, parentIndex) {
+    return section.values[parentIndex] === "yes";
+  }
+
+  function visibleSubCount(section) {
+    var n = 0;
+    SUBS.forEach(function (s) {
+      if (subVisible(section, s.parentIndex)) n++;
+    });
+    return n;
+  }
+
+  function visibleTotal(section) {
+    return TOTAL + visibleSubCount(section);
+  }
+
+  function answeredCount(section) {
+    var done = section.values.filter(function (v) { return v !== null; }).length;
+
+    SUBS.forEach(function (s) {
+      if (subVisible(section, s.parentIndex) &&
+          section.subValues[s.parentIndex] !== null) {
+        done++;
+      }
+    });
+
+    return done;
+  }
+
+  /* ---------------------------------------------------------
+     Render
+     --------------------------------------------------------- */
+
+  function render(id) {
+    var section = sectionsById[id];
+    var card = cardsById[id];
+    if (!section || !card) return;
+
+    var values = section.values;
+
+    // Hide/forget any sub whose parent is no longer "yes"
+    SUBS.forEach(function (s) {
+      if (values[s.parentIndex] !== "yes") {
+        section.subValues[s.parentIndex] = null;
+      }
+    });
+
+    /* main rows */
+    var mainItems = card.querySelectorAll(".item:not(.item--sub)");
+    mainItems.forEach(function (item, i) {
+      var val = values[i];
+      var yes = item.querySelector(".btn-check--yes");
+      var no  = item.querySelector(".btn-check--no");
+
+      var isYes = val === "yes";
+      var isNo  = val === "no";
+
+      yes.classList.toggle("active", isYes);
+      no.classList.toggle("active", isNo);
+      yes.setAttribute("aria-pressed", String(isYes));
+      no.setAttribute("aria-pressed", String(isNo));
+      yes.disabled = isNo;
+      no.disabled  = isYes;
+    });
+
+    /* nested sub rows */
+    SUBS.forEach(function (s) {
+      var subLi = card.querySelector('.item--sub[data-sub-for="' + s.parentIndex + '"]');
+      if (!subLi) return;
+
+      var show = subVisible(section, s.parentIndex);
+      subLi.classList.toggle("is-hidden", !show);
+
+      var subVal = section.subValues[s.parentIndex];
+      var sYes = subLi.querySelector(".btn-check--yes");
+      var sNo  = subLi.querySelector(".btn-check--no");
+
+      var sIsYes = subVal === "yes";
+      var sIsNo  = subVal === "no";
+
+      sYes.classList.toggle("active", sIsYes);
+      sNo.classList.toggle("active", sIsNo);
+      sYes.setAttribute("aria-pressed", String(sIsYes));
+      sNo.setAttribute("aria-pressed", String(sIsNo));
+      sYes.disabled = sIsNo;
+      sNo.disabled  = sIsYes;
+    });
+
+    /* counters */
+    var total = visibleTotal(section);
+    var done  = answeredCount(section);
+
+    var counter = card.querySelector("[data-count]");
+    counter.textContent = done + " / " + total;
+    counter.classList.toggle("is-full", done === total);
+
+    var tab = tabEls[id];
+    if (tab) {
+      var tabCountEl = tab.querySelector(".tab__count");
+      if (tabCountEl) tabCountEl.textContent = done + "/" + total;
+      tab.classList.toggle("is-complete", done === total);
+    }
+  }
+
+  /* ---------------------------------------------------------
+     Copy
+     --------------------------------------------------------- */
+
+  function subMark(check, subVal) {
+    if (check.subType === "outcome") {
+      return subVal === "yes" ? MARK.profit
+           : subVal === "no"  ? MARK.lost
+           : MARK.none;
+    }
+    return subVal === "yes" ? MARK.yes
+         : subVal === "no"  ? MARK.no
+         : MARK.none;
+  }
+
+  function formatChecklist(section) {
+    var lines = [section.label || section.name];
+
+    section.values.forEach(function (val, i) {
+      var check = CHECKS[i];
+      var mark;
+
+      if (check.type === "direction") {
+        mark = val === "yes" ? MARK.up + " Bullish"
+             : val === "no"  ? MARK.down + " Bearish"
+             : MARK.none;
+      } else {
+        mark = val === "yes" ? MARK.yes
+             : val === "no"  ? MARK.no
+             : MARK.none;
+      }
+
+      lines.push((i + 1) + ". " + check.text + " " + mark + (check.suffix || ""));
+
+      if (check.sub && val === "yes") {
+        lines.push(
+          "   " + (i + 1) + "a. " + check.sub + " " +
+          subMark(check, section.subValues[i])
+        );
+      }
+    });
+
+    return lines.join("\n");
+  }
+
+  function copyChecklist(id, btn) {
+    var section = sectionsById[id];
+    if (!section) return;
+
+    var text = formatChecklist(section);
+
+    copyToClipboard(text).then(function (ok) {
+      btn.textContent = ok ? "Copied \u2713" : "Copy failed";
+      btn.classList.add(ok ? "is-ok" : "is-err");
+
+      clearTimeout(btn._resetTimer);
+      btn._resetTimer = setTimeout(function () {
+        btn.textContent = "Copy checklist";
+        btn.classList.remove("is-ok", "is-err");
+      }, 1600);
+    });
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(
+        function () { return true; },
+        function () { return legacyCopy(text); }
+      );
+    }
+    return Promise.resolve(legacyCopy(text));
+  }
+
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.top = "-1000px";
+      ta.style.left = "-1000px";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+
+      var ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     Helpers
+     --------------------------------------------------------- */
+
+  var toastTimer = null;
+
+  function showToast(message, isError) {
+    toastEl.textContent = message;
+    toastEl.classList.toggle("is-error", !!isError);
+    toastEl.classList.add("is-visible");
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("is-visible");
+    }, 2400);
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  /* ---------------------------------------------------------
+     Init
+     --------------------------------------------------------- */
+
+  updateAddState();
+  emptyEl.hidden = false;
+  tabbarOuter.hidden = true;
+  tabCount.hidden = true;
+})();
+</script>
+</body>
+</html>
