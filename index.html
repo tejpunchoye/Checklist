@@ -74,6 +74,39 @@
 
   .header p b { color: #b9c6d6; font-weight: 600; }
 
+  .save-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: .76rem;
+    font-weight: 600;
+    color: #7a8899;
+    background: #141a22;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 11px;
+  }
+
+  .save-note.is-off {
+    color: #d9a441;
+    border-color: rgba(217, 164, 65, .45);
+    background: rgba(217, 164, 65, .08);
+  }
+
+  .save-note.is-off .save-dot {
+    background: #d9a441;
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, .18);
+  }
+
+  .save-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green-bright);
+    box-shadow: 0 0 0 3px rgba(63, 185, 80, .16);
+  }
+
   /* ---------------------------------------------------------
      Sticky top: add bar + tab bar
      --------------------------------------------------------- */
@@ -173,7 +206,7 @@
   }
 
   /* ---------------------------------------------------------
-     Tab bar (horizontal scroll on mobile)
+     Tab bar
      --------------------------------------------------------- */
 
   .tabbar-outer {
@@ -289,7 +322,7 @@
   .tab.is-active .tab__count { background: rgba(255, 255, 255, .22); }
 
   /* ---------------------------------------------------------
-     Panels area
+     Panels
      --------------------------------------------------------- */
 
   .panels {
@@ -326,7 +359,7 @@
   .empty span { font-size: .85rem; line-height: 1.6; }
 
   /* ---------------------------------------------------------
-     Card / tab panel
+     Card
      --------------------------------------------------------- */
 
   .card {
@@ -479,7 +512,6 @@
     line-height: 1;
   }
 
-  /* Text variant (Profit / Lost) */
   .btn-check--text {
     width: auto;
     min-width: 62px;
@@ -654,6 +686,7 @@
     .header { padding: 20px 16px 12px; }
     .header h1 { font-size: 1.15rem; }
     .header p { font-size: .8rem; }
+    .save-note { font-size: .72rem; }
 
     .toolbar { padding: 10px 16px; }
 
@@ -698,7 +731,7 @@
 
   <header class="header">
     <h1>Trading Checklist</h1>
-   
+    
   </header>
 
   <!-- Sticky: add bar + tab strip -->
@@ -737,13 +770,15 @@
      Configuration
      --------------------------------------------------------- */
 
+  var STORAGE_KEY = "trading-checklist-v1";
+
   // type:    "binary"    -> ✔ / ✕
   //          "direction" -> ▲ / ▼
   // sub:      nested checkpoint revealed when this row is "yes"
   // subType:  "binary" (default) -> ✔ / ✕
   //           "outcome"           -> Profit / Lost
   var CHECKS = [
-    { text: "Market Structure", type: "direction" },
+    { text: "Market Structure (Can be bullish/bearish)", type: "direction" },
     { text: "BOS/CHoCH with 3 candles" },
     { text: "BOS/CHoCH with imbalance" },
     { text: "BOS/CHoCH with displacement" },
@@ -751,6 +786,7 @@
     { text: "OB in correct side of the fib (discount for buy. premium for sell)" },
     { text: "OB is supported with Volume POI/VAs" },
     { text: "Session liquidity available around",
+      suffix: " (if there is session liquidity available then it need to be taken out)",
       sub: "Session liquidity sweep" },
     { text: "OB entry at 0.236 of the OB" },
     { text: "Trade taken",
@@ -762,7 +798,7 @@
     {
       group: "Majors",
       pairs: ["EURUSD", "GBPUSD", "USDJPY"]
-    },/*
+    },/**
     {
       group: "Crosses",
       pairs: [
@@ -775,23 +811,22 @@
     },*/
     {
       group: "Metals",
-      pairs: ["XAUUSD"]
+      pairs: ["XAUUSD", "XAGUSD"]
     }
   ];
 
   var MARK = {
-    yes:  "\u2705\uFE0F",   // ✅️
-    no:   "\u274C\uFE0F",   // ❌️
-    up:   "\u2B06\uFE0F",   // ⬆️
-    down: "\u2B07\uFE0F",   // ⬇️
-    none: "\u2B1C",         // ⬜
+    yes:  "\u2705\uFE0F",
+    no:   "\u274C\uFE0F",
+    up:   "\u2B06\uFE0F",
+    down: "\u2B07\uFE0F",
+    none: "\u2B1C",
     profit: "🟢 Profit",
     lost:   "🔴 Lost"
   };
 
   var TOTAL = CHECKS.length;
 
-  // Every nested checkpoint (a parent can have at most one)
   var SUBS = [];
   CHECKS.forEach(function (c, i) {
     if (c.sub) SUBS.push({ parentIndex: i, type: c.subType || "binary" });
@@ -808,6 +843,9 @@
   var nextId       = 1;
   var activeId     = null;
 
+  var suppressSave = false;
+  var storageOK    = true;
+
   /* ---------------------------------------------------------
      DOM references
      --------------------------------------------------------- */
@@ -821,6 +859,8 @@
   var select      = document.getElementById("pairSelect");
   var addBtn      = document.getElementById("addBtn");
   var toastEl     = document.getElementById("toast");
+  var saveNote    = document.getElementById("saveNote");
+  var saveNoteText = document.getElementById("saveNoteText");
 
   /* ---------------------------------------------------------
      Dropdown
@@ -841,6 +881,125 @@
   });
 
   /* ---------------------------------------------------------
+     Persistence
+     --------------------------------------------------------- */
+
+  function saveState() {
+    if (suppressSave || !storageOK) return;
+
+    var payload = {
+      v: 1,
+      activeId: activeId,
+      sections: sections.map(function (s) {
+        return {
+          id: s.id,
+          name: s.name,
+          values: s.values,
+          subValues: s.subValues
+        };
+      })
+    };
+
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch (err) {
+      markStorageUnavailable();
+    }
+  }
+
+  function normalizeValues(arr) {
+    return CHECKS.map(function (_, i) {
+      var v = Array.isArray(arr) ? arr[i] : null;
+      return (v === "yes" || v === "no") ? v : null;
+    });
+  }
+
+  function loadState() {
+    var raw = null;
+
+    try {
+      raw = window.localStorage.getItem(STORAGE_KEY);
+    } catch (err) {
+      markStorageUnavailable();
+      return false;
+    }
+
+    if (!raw) return false;
+
+    var data;
+    try {
+      data = JSON.parse(raw);
+    } catch (err) {
+      return false;
+    }
+
+    if (!data || !Array.isArray(data.sections) || data.sections.length === 0) {
+      return false;
+    }
+
+    suppressSave = true;
+
+    var used  = Object.create(null);
+    var maxId = 0;
+    var staged = [];
+
+    data.sections.forEach(function (raw2) {
+      if (!raw2 || typeof raw2.name !== "string") return;
+
+      var name = raw2.name.trim();
+      if (!name) return;
+
+      var id = Number(raw2.id);
+      if (!isFinite(id) || id <= 0 || used[id]) id = 0;
+      if (id > maxId) maxId = id;
+      if (id) used[id] = true;
+
+      staged.push({
+        id: id,
+        name: name,
+        label: name,
+        values: normalizeValues(raw2.values),
+        subValues: normalizeValues(raw2.subValues)
+      });
+    });
+
+    if (staged.length === 0) {
+      suppressSave = false;
+      return false;
+    }
+
+    staged.forEach(function (s) {
+      if (!s.id) {
+        s.id = ++maxId;
+        used[s.id] = true;
+      }
+      mountSection(s);
+    });
+
+    nextId = maxId + 1;
+
+    tabbarOuter.hidden = false;
+    emptyEl.hidden = true;
+    updateTabCount();
+    refreshLabels();
+
+    sections.forEach(function (s) { render(s.id); });
+
+    var wanted = Number(data.activeId);
+    var target = sectionsById[wanted] ? wanted : sections[0].id;
+    activate(target);
+
+    suppressSave = false;
+    return true;
+  }
+
+  function markStorageUnavailable() {
+    storageOK = false;
+    saveNote.classList.add("is-off");
+    saveNoteText.textContent = "Storage unavailable — answers won\u2019t persist";
+  }
+
+  /* ---------------------------------------------------------
      Add-bar state
      --------------------------------------------------------- */
 
@@ -858,8 +1017,21 @@
   select.addEventListener("change", updateAddState);
 
   /* ---------------------------------------------------------
-     Add section
+     Sections
      --------------------------------------------------------- */
+
+  function mountSection(section) {
+    sections.push(section);
+    sectionsById[section.id] = section;
+
+    var card = buildCard(section);
+    cardsById[section.id] = card;
+    panels.appendChild(card);
+
+    var tab = buildTab(section);
+    tabEls[section.id] = tab;
+    tabbar.appendChild(tab);
+  }
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -888,16 +1060,7 @@
       subValues: CHECKS.map(function () { return null; })
     };
 
-    sections.push(section);
-    sectionsById[section.id] = section;
-
-    var card = buildCard(section);
-    cardsById[section.id] = card;
-    panels.appendChild(card);
-
-    var tab = buildTab(section);
-    tabEls[section.id] = tab;
-    tabbar.appendChild(tab);
+    mountSection(section);
 
     tabbarOuter.hidden = false;
     emptyEl.hidden = true;
@@ -907,6 +1070,7 @@
 
     render(section.id);
     activate(section.id);
+    saveState();
 
     return section;
   }
@@ -918,7 +1082,7 @@
     var answered = section.values.some(function (v) { return v !== null; });
     if (answered) {
       var ok = window.confirm(
-        'Remove "' + section.label + '"?\nIts checklist answers will be lost.'
+        'Remove "' + section.label + '"?\nIts cached answers will be deleted.'
       );
       if (!ok) return;
     }
@@ -944,6 +1108,7 @@
       tabbarOuter.hidden = true;
       emptyEl.hidden = false;
       updateAddState();
+      saveState();
       return;
     }
 
@@ -954,6 +1119,7 @@
     }
 
     updateAddState();
+    saveState();
   }
 
   function updateTabCount() {
@@ -1053,6 +1219,7 @@
     });
 
     scrollTabIntoView(tabEls[id]);
+    saveState();
   }
 
   function scrollTabIntoView(tabEl) {
@@ -1254,6 +1421,7 @@
       section.values = CHECKS.map(function () { return null; });
       section.subValues = CHECKS.map(function () { return null; });
       render(id);
+      saveState();
       return;
     }
 
@@ -1272,7 +1440,9 @@
     var current = section.values[idx];
 
     section.values[idx] = (current === val) ? null : val;
+
     render(id);
+    saveState();
   }
 
   function handleSubCheck(id, btn) {
@@ -1288,7 +1458,9 @@
     var current = section.subValues[idx];
 
     section.subValues[idx] = (current === val) ? null : val;
+
     render(id);
+    saveState();
   }
 
   /* ---------------------------------------------------------
@@ -1335,14 +1507,12 @@
 
     var values = section.values;
 
-    // Hide/forget any sub whose parent is no longer "yes"
     SUBS.forEach(function (s) {
       if (values[s.parentIndex] !== "yes") {
         section.subValues[s.parentIndex] = null;
       }
     });
 
-    /* main rows */
     var mainItems = card.querySelectorAll(".item:not(.item--sub)");
     mainItems.forEach(function (item, i) {
       var val = values[i];
@@ -1360,7 +1530,6 @@
       no.disabled  = isYes;
     });
 
-    /* nested sub rows */
     SUBS.forEach(function (s) {
       var subLi = card.querySelector('.item--sub[data-sub-for="' + s.parentIndex + '"]');
       if (!subLi) return;
@@ -1383,7 +1552,6 @@
       sNo.disabled  = sIsYes;
     });
 
-    /* counters */
     var total = visibleTotal(section);
     var done  = answeredCount(section);
 
@@ -1520,13 +1688,18 @@
   }
 
   /* ---------------------------------------------------------
-     Init
+     Init — restore cached work, or show the empty state
      --------------------------------------------------------- */
 
   updateAddState();
-  emptyEl.hidden = false;
-  tabbarOuter.hidden = true;
   tabCount.hidden = true;
+
+  var restored = loadState();
+
+  if (!restored) {
+    tabbarOuter.hidden = true;
+    emptyEl.hidden = false;
+  }
 })();
 </script>
 </body>
