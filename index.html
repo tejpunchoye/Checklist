@@ -21,704 +21,302 @@
     --red-bright: #f85149;
     --blue: #1f6feb;
     --blue-bright: #388bfd;
-
     --check: 38px;
     --panel-w: 820px;
   }
-
   * { box-sizing: border-box; }
-
-  html {
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   body {
     margin: 0;
     min-height: 100vh;
     min-height: 100dvh;
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     color: var(--text);
-    background:
-      radial-gradient(1100px 550px at 50% -15%, #17202c 0%, rgba(11,15,20,0) 65%),
-      var(--bg);
+    background: radial-gradient(1100px 550px at 50% -15%, #17202c 0%, rgba(11,15,20,0) 65%), var(--bg);
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
     overscroll-behavior-y: none;
   }
 
-  /* ---------------------------------------------------------
-     Header
-     --------------------------------------------------------- */
-
-  .header {
-    max-width: var(--panel-w);
-    margin: 0 auto;
-    padding: 28px 24px 16px;
-  }
-
-  .header h1 {
-    margin: 0 0 6px;
-    font-size: 1.32rem;
-    letter-spacing: .02em;
-    font-weight: 700;
-  }
-
-  .header p {
-    margin: 0;
-    font-size: .84rem;
-    color: var(--muted);
-    line-height: 1.55;
-  }
-
+  /* Header */
+  .header { max-width: var(--panel-w); margin: 0 auto; padding: 28px 24px 16px; }
+  .header h1 { margin: 0 0 6px; font-size: 1.32rem; letter-spacing: .02em; font-weight: 700; }
+  .header p { margin: 0; font-size: .84rem; color: var(--muted); line-height: 1.55; }
   .header p b { color: #b9c6d6; font-weight: 600; }
-
   .save-note {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 10px;
-    font-size: .76rem;
-    font-weight: 600;
-    color: #7a8899;
-    background: #141a22;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 5px 11px;
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+    font-size: .76rem; font-weight: 600; color: #7a8899;
+    background: #141a22; border: 1px solid var(--border); border-radius: 999px; padding: 5px 11px;
   }
+  .save-note.is-off { color: #d9a441; border-color: rgba(217,164,65,.45); background: rgba(217,164,65,.08); }
+  .save-note.is-off .save-dot { background: #d9a441; box-shadow: 0 0 0 3px rgba(217,164,65,.18); }
+  .save-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 0 3px rgba(63,185,80,.16); }
 
-  .save-note.is-off {
-    color: #d9a441;
-    border-color: rgba(217, 164, 65, .45);
-    background: rgba(217, 164, 65, .08);
-  }
-
-  .save-note.is-off .save-dot {
-    background: #d9a441;
-    box-shadow: 0 0 0 3px rgba(217, 164, 65, .18);
-  }
-
-  .save-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--green-bright);
-    box-shadow: 0 0 0 3px rgba(63, 185, 80, .16);
-  }
-
-  /* ---------------------------------------------------------
-     Sticky top: add bar + tab bar
-     --------------------------------------------------------- */
-
+  /* Sticky top */
   .sticky-top {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: rgba(11, 15, 20, .92);
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(11,15,20,.92);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
     backdrop-filter: blur(14px) saturate(140%);
     border-bottom: 1px solid var(--line);
   }
-
-  .toolbar {
-    max-width: var(--panel-w);
-    margin: 0 auto;
-    padding: 12px 24px;
-    display: flex;
-    gap: 10px;
-  }
-
-  .select-wrap {
-    position: relative;
-    flex: 1;
-    min-width: 0;
-  }
-
+  .toolbar { max-width: var(--panel-w); margin: 0 auto; padding: 12px 24px; display: flex; gap: 10px; }
+  .select-wrap { position: relative; flex: 1; min-width: 0; }
   .select-wrap::after {
-    content: "";
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    width: 9px;
-    height: 9px;
-    border-right: 2px solid #7a8899;
-    border-bottom: 2px solid #7a8899;
-    transform: translateY(-70%) rotate(45deg);
-    pointer-events: none;
+    content: ""; position: absolute; right: 16px; top: 50%; width: 9px; height: 9px;
+    border-right: 2px solid #7a8899; border-bottom: 2px solid #7a8899;
+    transform: translateY(-70%) rotate(45deg); pointer-events: none;
   }
-
   .select-wrap select {
-    width: 100%;
-    height: 48px;
-    padding: 0 44px 0 14px;
-    border-radius: 11px;
-    border: 1px solid var(--border);
-    background: #11161d;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.2;
-    cursor: pointer;
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
+    width: 100%; height: 48px; padding: 0 44px 0 14px; border-radius: 11px;
+    border: 1px solid var(--border); background: #11161d; color: var(--text);
+    font-family: inherit; font-size: 16px; font-weight: 500; line-height: 1.2;
+    cursor: pointer; outline: none; appearance: none; -webkit-appearance: none;
     transition: border-color .15s, box-shadow .15s;
   }
-
   .select-wrap select.is-placeholder { color: #5d6a7c; }
-
-  .select-wrap select:focus-visible {
-    border-color: var(--blue-bright);
-    box-shadow: 0 0 0 3px rgba(31, 111, 235, .2);
-  }
-
+  .select-wrap select:focus-visible { border-color: var(--blue-bright); box-shadow: 0 0 0 3px rgba(31,111,235,.2); }
   .select-wrap select option { color: var(--text); background: #11161d; }
   .select-wrap select optgroup { color: #7a8899; background: #11161d; font-style: normal; }
-
   .btn-add {
-    flex: none;
-    height: 48px;
-    padding: 0 20px;
-    border-radius: 11px;
-    border: 1px solid var(--blue-bright);
-    background: var(--blue);
-    color: #fff;
-    font-family: inherit;
-    font-size: .88rem;
-    font-weight: 700;
-    letter-spacing: .01em;
-    cursor: pointer;
-    transition: background .15s, opacity .15s, transform .08s;
+    flex: none; height: 48px; padding: 0 20px; border-radius: 11px;
+    border: 1px solid var(--blue-bright); background: var(--blue); color: #fff;
+    font-family: inherit; font-size: .88rem; font-weight: 700; letter-spacing: .01em;
+    cursor: pointer; transition: background .15s, opacity .15s, transform .08s;
   }
-
   .btn-add:hover:not(:disabled) { background: var(--blue-bright); }
   .btn-add:active:not(:disabled) { transform: scale(.975); }
   .btn-add:focus-visible { outline: 2px solid #79b8ff; outline-offset: 2px; }
+  .btn-add:disabled { opacity: .4; cursor: not-allowed; border-color: var(--border); background: #1a212b; color: #7a8899; }
 
-  .btn-add:disabled {
-    opacity: .4;
-    cursor: not-allowed;
-    border-color: var(--border);
-    background: #1a212b;
-    color: #7a8899;
-  }
-
-  /* ---------------------------------------------------------
-     Tab bar
-     --------------------------------------------------------- */
-
-  .tabbar-outer {
-    border-top: 1px solid var(--line);
-  }
-
+  /* Tab bar */
+  .tabbar-outer { border-top: 1px solid var(--line); }
   .tabbar-outer[hidden] { display: none; }
-
-  .tabbar-row {
-    max-width: var(--panel-w);
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-right: 16px;
-  }
-
+  .tabbar-row { max-width: var(--panel-w); margin: 0 auto; display: flex; align-items: center; gap: 10px; padding-right: 16px; }
   .tabbar {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    gap: 8px;
-    padding: 10px 0 10px 24px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    -webkit-overflow-scrolling: touch;
+    flex: 1; min-width: 0; display: flex; gap: 8px;
+    padding: 10px 0 10px 24px; overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch;
     scroll-padding-inline: 24px;
   }
-
   .tabbar::-webkit-scrollbar { display: none; }
-
   .tab-count {
-    flex: none;
-    font-size: .7rem;
-    font-weight: 700;
-    color: #7a8899;
-    background: #1a212b;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 4px 9px;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    letter-spacing: .03em;
+    flex: none; font-size: .7rem; font-weight: 700; color: #7a8899;
+    background: #1a212b; border: 1px solid var(--border); border-radius: 999px;
+    padding: 4px 9px; font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: .03em;
   }
-
   .tab-count[hidden] { display: none; }
-
   .tab {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 40px;
-    padding: 8px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: #141a22;
-    color: #b9c6d6;
-    font-family: inherit;
-    font-size: .82rem;
-    font-weight: 600;
-    letter-spacing: .04em;
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
+    flex: none; display: inline-flex; align-items: center; gap: 8px;
+    min-height: 40px; padding: 8px 14px; border-radius: 999px;
+    border: 1px solid var(--border); background: #141a22; color: #b9c6d6;
+    font-family: inherit; font-size: .82rem; font-weight: 600; letter-spacing: .04em;
+    white-space: nowrap; cursor: pointer; user-select: none; -webkit-user-select: none;
     transition: background .15s, border-color .15s, color .15s, transform .08s;
   }
-
-  .tab:hover {
-    background: #1a212b;
-    border-color: #3c4a5f;
-    color: #e6edf3;
-  }
-
+  .tab:hover { background: #1a212b; border-color: #3c4a5f; color: #e6edf3; }
   .tab:active { transform: scale(.97); }
   .tab:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-
-  .tab.is-active {
-    background: var(--blue);
-    border-color: var(--blue-bright);
-    color: #fff;
-  }
-
-  .tab.is-complete {
-    border-color: rgba(46, 160, 67, .55);
-    color: var(--green-bright);
-  }
-
-  .tab.is-complete:hover {
-    background: rgba(46, 160, 67, .12);
-    color: var(--green-bright);
-  }
-
-  .tab.is-complete.is-active {
-    background: var(--green);
-    border-color: var(--green-bright);
-    color: #fff;
-  }
-
+  .tab.is-active { background: var(--blue); border-color: var(--blue-bright); color: #fff; }
+  .tab.is-complete { border-color: rgba(46,160,67,.55); color: var(--green-bright); }
+  .tab.is-complete:hover { background: rgba(46,160,67,.12); color: var(--green-bright); }
+  .tab.is-complete.is-active { background: var(--green); border-color: var(--green-bright); color: #fff; }
   .tab__count {
-    font-size: .7rem;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, .08);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0;
+    font-size: .7rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;
+    background: rgba(255,255,255,.08); font-variant-numeric: tabular-nums; letter-spacing: 0;
   }
+  .tab.is-active .tab__count { background: rgba(255,255,255,.22); }
 
-  .tab.is-active .tab__count { background: rgba(255, 255, 255, .22); }
+  /* Panels */
+  .panels { max-width: var(--panel-w); margin: 0 auto; padding: 20px 24px calc(48px + env(safe-area-inset-bottom)); }
 
-  /* ---------------------------------------------------------
-     Panels
-     --------------------------------------------------------- */
-
-  .panels {
-    max-width: var(--panel-w);
-    margin: 0 auto;
-    padding: 20px 24px calc(48px + env(safe-area-inset-bottom));
-  }
-
-  /* ---------------------------------------------------------
-     Empty state
-     --------------------------------------------------------- */
-
+  /* Empty */
   .empty {
-    max-width: var(--panel-w);
-    margin: 20px auto;
-    padding: 56px 24px;
-    border: 1px dashed var(--border);
-    border-radius: 16px;
-    text-align: center;
-    color: var(--muted);
-    background: rgba(255, 255, 255, .015);
+    max-width: var(--panel-w); margin: 20px auto; padding: 56px 24px;
+    border: 1px dashed var(--border); border-radius: 16px; text-align: center;
+    color: var(--muted); background: rgba(255,255,255,.015);
   }
-
   .empty[hidden] { display: none; }
-
-  .empty strong {
-    display: block;
-    color: #c9d5e3;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
+  .empty strong { display: block; color: #c9d5e3; font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
   .empty span { font-size: .85rem; line-height: 1.6; }
 
-  /* ---------------------------------------------------------
-     Card
-     --------------------------------------------------------- */
-
+  /* Card */
   .card {
     background: linear-gradient(180deg, var(--card-1), var(--card-2));
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px 18px 16px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
+    border: 1px solid var(--border); border-radius: 16px; padding: 18px 18px 16px;
+    display: flex; flex-direction: column; box-shadow: 0 12px 30px rgba(0,0,0,.35);
   }
-
   .card.is-hidden { display: none; }
-
   .card__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 6px;
-    padding-bottom: 13px;
-    border-bottom: 1px solid var(--line);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+    margin-bottom: 10px; padding-bottom: 13px; border-bottom: 1px solid var(--line);
   }
-
+  .card__title-wrap { min-width: 0; flex: 1; }
   .card__title {
-    margin: 0;
-    font-size: 1.02rem;
-    font-weight: 700;
-    letter-spacing: .06em;
-    overflow-wrap: anywhere;
+    margin: 0; font-size: 1.02rem; font-weight: 700; letter-spacing: .06em; overflow-wrap: anywhere;
   }
-
-  .card__head-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex: none;
+  .card__date {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 5px;
+    font-size: .71rem; font-weight: 600; color: #8b98a9; letter-spacing: .01em; line-height: 1.3;
   }
-
+  .card__date svg { flex: none; width: 11px; height: 11px; stroke: #6f7d8f; }
+  .card__head-right { display: flex; align-items: center; gap: 8px; flex: none; padding-top: 2px; }
   .card__count {
-    font-size: .74rem;
-    font-weight: 600;
-    color: var(--muted);
-    background: #1a212b;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 4px 10px;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    transition: color .2s, border-color .2s;
+    font-size: .74rem; font-weight: 600; color: var(--muted); background: #1a212b;
+    border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px;
+    font-variant-numeric: tabular-nums; white-space: nowrap; transition: color .2s, border-color .2s;
   }
-
-  .card__count.is-full {
-    color: var(--green-bright);
-    border-color: rgba(46, 160, 67, .55);
-  }
-
+  .card__count.is-full { color: var(--green-bright); border-color: rgba(46,160,67,.55); }
   .btn-remove {
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
-    border: 1px solid transparent;
-    background: transparent;
-    color: #6f7d8f;
-    font-size: .78rem;
-    line-height: 1;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
+    width: 32px; height: 32px; border-radius: 9px; border: 1px solid transparent;
+    background: transparent; color: #6f7d8f; font-size: .78rem; line-height: 1;
+    display: grid; place-items: center; cursor: pointer;
     transition: background .15s, color .15s, border-color .15s;
   }
-
-  .btn-remove:hover {
-    background: rgba(218, 54, 51, .14);
-    border-color: rgba(218, 54, 51, .45);
-    color: var(--red-bright);
-  }
-
+  .btn-remove:hover { background: rgba(218,54,51,.14); border-color: rgba(218,54,51,.45); color: var(--red-bright); }
   .btn-remove:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
-  /* ---------------------------------------------------------
-     Checklist rows
-     --------------------------------------------------------- */
-
-  .list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex: 1;
-  }
-
-  .item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--line);
-  }
-
+  /* List */
+  .list { list-style: none; margin: 0; padding: 0; flex: 1; }
+  .item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .item:last-child { border-bottom: 0; }
-
   .item:has(+ .item--sub.is-hidden) { border-bottom: 0; }
-
   .item__num {
-    flex: none;
-    width: 15px;
-    font-size: .75rem;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-    text-align: right;
+    flex: none; width: 15px; font-size: .75rem; color: var(--muted);
+    font-variant-numeric: tabular-nums; text-align: right;
   }
-
   .item__text {
-    flex: 1;
-    min-width: 0;
-    font-size: .875rem;
-    line-height: 1.4;
-    color: #cfd8e3;
-    overflow-wrap: anywhere;
+    flex: 1; min-width: 0; font-size: .875rem; line-height: 1.4;
+    color: #cfd8e3; overflow-wrap: anywhere;
   }
-
-  .actions {
-    flex: none;
-    display: flex;
-    gap: 6px;
-  }
-
+  .actions { flex: none; display: flex; gap: 6px; }
   .btn-check {
-    width: var(--check);
-    height: var(--check);
-    flex: none;
-    border-radius: 10px;
-    border: 1px solid #2b3546;
-    background: #1a212b;
-    color: #6f7d8f;
-    font-size: .84rem;
-    font-weight: 700;
-    line-height: 1;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
+    width: var(--check); height: var(--check); flex: none; border-radius: 10px;
+    border: 1px solid #2b3546; background: #1a212b; color: #6f7d8f;
+    font-size: .84rem; font-weight: 700; line-height: 1;
+    display: grid; place-items: center; cursor: pointer; user-select: none; -webkit-user-select: none;
     transition: background .15s, border-color .15s, color .15s, opacity .15s, transform .08s;
   }
-
-  .btn-check--arrow {
-    font-size: 1.05rem;
-    font-weight: 400;
-    line-height: 1;
-  }
-
-  .btn-check--text {
-    width: auto;
-    min-width: 62px;
-    padding: 0 11px;
-    font-size: .76rem;
-    font-weight: 700;
-    letter-spacing: .01em;
-  }
-
-  .btn-check:hover:not(:disabled) {
-    border-color: #3c4a5f;
-    color: #c9d5e3;
-  }
-
+  .btn-check--arrow { font-size: 1.05rem; font-weight: 400; line-height: 1; }
+  .btn-check:hover:not(:disabled) { border-color: #3c4a5f; color: #c9d5e3; }
   .btn-check:active:not(:disabled) { transform: scale(.92); }
   .btn-check:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-
   .btn-check--yes.active {
-    background: rgba(46, 160, 67, .18);
-    border-color: var(--green);
-    color: var(--green-bright);
-    box-shadow: inset 0 0 0 1px rgba(46, 160, 67, .3);
+    background: rgba(46,160,67,.18); border-color: var(--green); color: var(--green-bright);
+    box-shadow: inset 0 0 0 1px rgba(46,160,67,.3);
   }
-
   .btn-check--no.active {
-    background: rgba(218, 54, 51, .16);
-    border-color: var(--red);
-    color: var(--red-bright);
-    box-shadow: inset 0 0 0 1px rgba(218, 54, 51, .3);
+    background: rgba(218,54,51,.16); border-color: var(--red); color: var(--red-bright);
+    box-shadow: inset 0 0 0 1px rgba(218,54,51,.3);
   }
-
   .btn-check:disabled {
-    opacity: .22;
-    cursor: not-allowed;
-    background: #151a21;
-    border-color: #222a36;
-    color: #55606e;
-    box-shadow: none;
+    opacity: .22; cursor: not-allowed; background: #151a21;
+    border-color: #222a36; color: #55606e; box-shadow: none;
   }
 
-  /* ---------------------------------------------------------
-     Nested sub-checkpoint row
-     --------------------------------------------------------- */
-
-  .item--sub {
-    position: relative;
-    padding-left: 26px;
-    animation: subIn .18s ease-out;
-  }
-
+  /* Sub row */
+  .item--sub { position: relative; padding-left: 26px; animation: subIn .18s ease-out; }
   .item--sub::before {
-    content: "";
-    position: absolute;
-    left: 7px;
-    top: 7px;
-    bottom: 7px;
-    width: 2px;
-    border-radius: 2px;
-    background: linear-gradient(180deg, rgba(56, 139, 253, .6), rgba(56, 139, 253, .15));
+    content: ""; position: absolute; left: 7px; top: 7px; bottom: 7px; width: 2px;
+    border-radius: 2px; background: linear-gradient(180deg, rgba(56,139,253,.6), rgba(56,139,253,.15));
   }
-
-  .item--sub .item__num {
-    width: auto;
-    min-width: 22px;
-    font-size: .7rem;
-    color: #7a8899;
-    text-align: left;
-  }
-
-  .item--sub .item__text {
-    font-size: .84rem;
-    color: #b9c6d6;
-  }
-
+  .item--sub .item__num { width: auto; min-width: 22px; font-size: .7rem; color: #7a8899; text-align: left; }
+  .item--sub .item__text { font-size: .84rem; color: #b9c6d6; }
   .item--sub.is-hidden { display: none; }
+  @keyframes subIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
-  @keyframes subIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to   { opacity: 1; transform: translateY(0); }
+  /* Multi-option sub */
+  .item--multi { align-items: flex-start; padding-top: 12px; padding-bottom: 12px; }
+  .item--multi .item__text { padding-top: 4px; }
+  .options { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+  .btn-option {
+    height: 30px; padding: 0 11px; border-radius: 8px;
+    border: 1px solid #2b3546; background: #1a212b; color: #8b98a9;
+    font-family: inherit; font-size: .74rem; font-weight: 700; letter-spacing: .01em;
+    line-height: 1; display: inline-flex; align-items: center; justify-content: center;
+    white-space: nowrap; cursor: pointer; user-select: none; -webkit-user-select: none;
+    transition: background .15s, border-color .15s, color .15s, opacity .15s, transform .08s;
+  }
+  .btn-option:hover:not(:disabled) { border-color: #3c4a5f; color: #cfd8e3; }
+  .btn-option:active:not(:disabled) { transform: scale(.96); }
+  .btn-option:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .btn-option.active {
+    background: rgba(46,160,67,.18); border-color: var(--green); color: var(--green-bright);
+    box-shadow: inset 0 0 0 1px rgba(46,160,67,.3);
+  }
+  .btn-option:disabled {
+    opacity: .3; cursor: not-allowed; background: #151a21;
+    border-color: #222a36; color: #55606e; box-shadow: none;
   }
 
-  /* ---------------------------------------------------------
-     Card footer
-     --------------------------------------------------------- */
-
+  /* Footer */
   .card__foot {
-    display: flex;
-    gap: 10px;
-    margin-top: 14px;
-    padding-top: 14px;
+    display: flex; gap: 10px; margin-top: 14px; padding-top: 14px;
     border-top: 1px solid var(--line);
   }
-
   .btn {
-    border-radius: 11px;
-    border: 1px solid transparent;
-    font-family: inherit;
-    font-size: .84rem;
-    font-weight: 700;
-    padding: 11px 16px;
-    min-height: 46px;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
+    border-radius: 11px; border: 1px solid transparent; font-family: inherit;
+    font-size: .84rem; font-weight: 700; padding: 11px 16px; min-height: 46px;
+    cursor: pointer; user-select: none; -webkit-user-select: none;
     transition: background .15s, border-color .15s, color .15s, transform .08s;
   }
-
   .btn:active { transform: scale(.985); }
   .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-
-  .btn--copy {
-    flex: 1;
-    background: var(--blue);
-    color: #fff;
-    border-color: var(--blue-bright);
-  }
-
+  .btn--copy { flex: 1; background: var(--blue); color: #fff; border-color: var(--blue-bright); }
   .btn--copy:hover { background: var(--blue-bright); }
-  .btn--copy.is-ok  { background: var(--green); border-color: var(--green-bright); }
-  .btn--copy.is-err { background: var(--red);   border-color: var(--red-bright); }
-
-  .btn--reset {
-    background: #1a212b;
-    border-color: var(--border);
-    color: #9aa8b8;
-  }
-
+  .btn--copy.is-ok { background: var(--green); border-color: var(--green-bright); }
+  .btn--copy.is-err { background: var(--red); border-color: var(--red-bright); }
+  .btn--reset { background: #1a212b; border-color: var(--border); color: #9aa8b8; }
   .btn--reset:hover { background: #202834; color: #cfd8e3; }
 
-  /* ---------------------------------------------------------
-     Toast
-     --------------------------------------------------------- */
-
+  /* Toast */
   .toast {
-    position: fixed;
-    left: 50%;
-    bottom: calc(20px + env(safe-area-inset-bottom));
-    transform: translate(-50%, 14px);
-    max-width: calc(100vw - 32px);
-    padding: 12px 20px;
-    border-radius: 999px;
-    background: #1c2431;
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-size: .85rem;
-    font-weight: 600;
-    text-align: center;
-    box-shadow: 0 12px 34px rgba(0, 0, 0, .5);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 100;
+    position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: translate(-50%, 14px); max-width: calc(100vw - 32px);
+    padding: 12px 20px; border-radius: 999px; background: #1c2431;
+    border: 1px solid var(--border); color: var(--text);
+    font-size: .85rem; font-weight: 600; text-align: center;
+    box-shadow: 0 12px 34px rgba(0,0,0,.5); opacity: 0; pointer-events: none; z-index: 100;
     transition: opacity .18s ease, transform .18s ease;
   }
+  .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+  .toast.is-error { border-color: rgba(218,54,51,.65); color: #ffb4b0; }
 
-  .toast.is-visible {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-
-  .toast.is-error {
-    border-color: rgba(218, 54, 51, .65);
-    color: #ffb4b0;
-  }
-
-  /* ---------------------------------------------------------
-     Mobile tuning
-     --------------------------------------------------------- */
-
+  /* Mobile */
   @media (max-width: 640px) {
     :root { --check: 42px; }
-
     .header { padding: 20px 16px 12px; }
     .header h1 { font-size: 1.15rem; }
     .header p { font-size: .8rem; }
     .save-note { font-size: .72rem; }
-
     .toolbar { padding: 10px 16px; }
-
     .tabbar-row { padding-right: 14px; }
     .tabbar { padding: 9px 0 9px 16px; scroll-padding-inline: 16px; }
-
     .panels { padding: 14px 16px calc(40px + env(safe-area-inset-bottom)); }
-
     .empty { margin: 14px 16px; padding: 44px 18px; }
-
     .card { padding: 14px 14px 14px; border-radius: 14px; }
     .card__title { font-size: .98rem; }
+    .card__date { font-size: .69rem; }
     .item { padding: 8px 0; gap: 8px; }
     .item__text { font-size: .85rem; }
     .item__num { width: 14px; font-size: .72rem; }
     .btn-remove { width: 36px; height: 36px; }
-
     .btn-check--arrow { font-size: 1.18rem; }
-    .btn-check--text { min-width: 64px; font-size: .74rem; }
-
     .item--sub { padding-left: 20px; }
     .item--sub::before { left: 4px; top: 5px; bottom: 5px; }
     .item--sub .item__text { font-size: .82rem; }
     .item--sub .item__num { min-width: 20px; }
+    .item--multi { flex-wrap: wrap; }
+    .item--multi .item__text { flex-basis: calc(100% - 30px); padding-top: 0; }
+    .item--multi .options { flex-basis: 100%; justify-content: flex-start; padding-left: 22px; margin-top: 6px; }
+    .btn-option { height: 34px; font-size: .76rem; padding: 0 12px; }
   }
-
   @media (max-width: 360px) {
     .item__text { font-size: .82rem; }
     .btn-add { padding: 0 14px; }
-    .btn-check--text { min-width: 58px; padding: 0 8px; font-size: .72rem; }
+    .btn-option { height: 32px; padding: 0 10px; font-size: .74rem; }
   }
-
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: .001ms !important;
@@ -731,10 +329,8 @@
 
   <header class="header">
     <h1>Trading Checklist</h1>
-    
   </header>
 
-  <!-- Sticky: add bar + tab strip -->
   <div class="sticky-top">
     <form class="toolbar" id="addForm" autocomplete="off">
       <div class="select-wrap">
@@ -766,75 +362,66 @@
 (function () {
   "use strict";
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Configuration
-     --------------------------------------------------------- */
+     ========================================================== */
 
-  var STORAGE_KEY = "trading-checklist-v1";
+  var STORAGE_KEY = "trading-checklist-v2";
 
-  // type:    "binary"    -> ✔ / ✕
-  //          "direction" -> ▲ / ▼
-  // sub:      nested checkpoint revealed when this row is "yes"
-  // subType:  "binary" (default) -> ✔ / ✕
-  //           "outcome"           -> Profit / Lost
   var CHECKS = [
-    { text: "Market Structure (Can be bullish/bearish)", type: "direction" },
+    { text: "Market Structure", type: "direction" },
     { text: "BOS/CHoCH with 3 candles" },
     { text: "BOS/CHoCH with imbalance" },
     { text: "BOS/CHoCH with displacement" },
-    { text: "Structural liquidity sweep before OB" },
-    { text: "OB in correct side of the fib (discount for buy. premium for sell)" },
+    { text: "Liquidity sweep before OB" },
+    { text: "OB in correct side of the fib (buy discount,sell premium)" },
+    { text: "FVG immediately after OB" },
     { text: "OB is supported with Volume POI/VAs" },
     { text: "Session liquidity available around",
       suffix: " (if there is session liquidity available then it need to be taken out)",
       sub: "Session liquidity sweep" },
-    { text: "OB entry at 0.236 of the OB" },
-    { text: "Trade taken",
-      sub: "Trade result",
-      subType: "outcome" }
+    { text: "Entry",
+      sub: "Entry type",
+      subType: "options",
+      subOptions: ["FVG", "Body of OB", "Wick of OB", "0.5 of OB"] }
   ];
 
   var PAIR_GROUPS = [
-    {
-      group: "Majors",
-      pairs: ["EURUSD", "GBPUSD", "USDJPY"]
-    },/**
-    {
-      group: "Crosses",
-      pairs: [
-        "EURGBP", "EURJPY", "EURCHF", "EURAUD", "EURNZD", "EURCAD",
-        "GBPJPY", "GBPCHF", "GBPAUD", "GBPCAD", "GBPNZD",
-        "AUDJPY", "AUDCAD", "AUDCHF", "AUDNZD",
-        "NZDJPY", "NZDCAD", "NZDCHF",
-        "CADJPY", "CADCHF", "CHFJPY"
-      ]
-    },*/
-    {
-      group: "Metals",
-      pairs: ["XAUUSD", "XAGUSD"]
-    }
+    { group: "Majors", pairs: ["EURUSD","GBPUSD","USDJPY"] }, /*
+    { group: "Crosses", pairs: [
+      "EURGBP","EURJPY","EURCHF","EURAUD","EURNZD","EURCAD",
+      "GBPJPY","GBPCHF","GBPAUD","GBPCAD","GBPNZD",
+      "AUDJPY","AUDCAD","AUDCHF","AUDNZD",
+      "NZDJPY","NZDCAD","NZDCHF",
+      "CADJPY","CADCHF","CHFJPY"
+    ]}, */
+    { group: "Metals", pairs: ["XAUUSD","XAGUSD"] }
   ];
 
   var MARK = {
-    yes:  "\u2705\uFE0F",
-    no:   "\u274C\uFE0F",
-    up:   "\u2B06\uFE0F",
-    down: "\u2B07\uFE0F",
-    none: "\u2B1C",
-    profit: "🟢 Profit",
-    lost:   "🔴 Lost"
+    yes: "\u2705\uFE0F",
+    no:  "\u274C\uFE0F",
+    up:  "\u2B06\uFE0F",
+    down:"\u2B07\uFE0F",
+    none:"\u2B1C"
   };
 
   var TOTAL = CHECKS.length;
 
   var SUBS = [];
   CHECKS.forEach(function (c, i) {
-    if (c.sub) SUBS.push({ parentIndex: i, type: c.subType || "binary" });
+    if (c.sub) {
+      SUBS.push({
+        parentIndex: i,
+        type: c.subType || "binary",
+        options: c.subOptions || null
+      });
+    }
   });
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      State
-     --------------------------------------------------------- */
+     ========================================================== */
 
   var sections     = [];
   var sectionsById = Object.create(null);
@@ -842,58 +429,73 @@
   var tabEls       = Object.create(null);
   var nextId       = 1;
   var activeId     = null;
-
   var suppressSave = false;
   var storageOK    = true;
 
-  /* ---------------------------------------------------------
-     DOM references
-     --------------------------------------------------------- */
+  /* ==========================================================
+     DOM
+     ========================================================== */
 
-  var panels      = document.getElementById("panels");
-  var emptyEl     = document.getElementById("empty");
-  var tabbar      = document.getElementById("tabbar");
-  var tabbarOuter = document.getElementById("tabbarOuter");
-  var tabCount    = document.getElementById("tabCount");
-  var form        = document.getElementById("addForm");
-  var select      = document.getElementById("pairSelect");
-  var addBtn      = document.getElementById("addBtn");
-  var toastEl     = document.getElementById("toast");
-  var saveNote    = document.getElementById("saveNote");
+  var panels       = document.getElementById("panels");
+  var emptyEl      = document.getElementById("empty");
+  var tabbar       = document.getElementById("tabbar");
+  var tabbarOuter  = document.getElementById("tabbarOuter");
+  var tabCount     = document.getElementById("tabCount");
+  var form         = document.getElementById("addForm");
+  var select       = document.getElementById("pairSelect");
+  var addBtn       = document.getElementById("addBtn");
+  var toastEl      = document.getElementById("toast");
+  var saveNote     = document.getElementById("saveNote");
   var saveNoteText = document.getElementById("saveNoteText");
 
-  /* ---------------------------------------------------------
-     Dropdown
-     --------------------------------------------------------- */
+  /* ==========================================================
+     Date helpers
+     ========================================================== */
+
+  function nowISO() { return new Date().toISOString(); }
+
+  function formatOpened(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "Date unknown";
+    var day   = String(d.getDate()).padStart(2, "0");
+    var month = d.toLocaleString("en-GB", { month: "short" });
+    var year  = d.getFullYear();
+    var hours = String(d.getHours()).padStart(2, "0");
+    var mins  = String(d.getMinutes()).padStart(2, "0");
+    return day + " " + month + " " + year + " \u00B7 " + hours + ":" + mins;
+  }
+
+  /* ==========================================================
+     Populate dropdown
+     ========================================================== */
 
   PAIR_GROUPS.forEach(function (group) {
     var og = document.createElement("optgroup");
     og.label = group.group;
-
     group.pairs.forEach(function (pair) {
       var opt = document.createElement("option");
       opt.value = pair;
       opt.textContent = pair;
       og.appendChild(opt);
     });
-
     select.appendChild(og);
   });
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Persistence
-     --------------------------------------------------------- */
+     ========================================================== */
 
   function saveState() {
     if (suppressSave || !storageOK) return;
 
     var payload = {
-      v: 1,
+      v: 2,
       activeId: activeId,
       sections: sections.map(function (s) {
         return {
           id: s.id,
           name: s.name,
+          openedAt: s.openedAt,
           values: s.values,
           subValues: s.subValues
         };
@@ -907,9 +509,26 @@
     }
   }
 
-  function normalizeValues(arr) {
+  function normalizeMainValues(arr) {
     return CHECKS.map(function (_, i) {
       var v = Array.isArray(arr) ? arr[i] : null;
+      return (v === "yes" || v === "no") ? v : null;
+    });
+  }
+
+  function normalizeSubValues(arr) {
+    return CHECKS.map(function (check, i) {
+      var v = Array.isArray(arr) ? arr[i] : null;
+      var sub = null;
+      for (var k = 0; k < SUBS.length; k++) {
+        if (SUBS[k].parentIndex === i) { sub = SUBS[k]; break; }
+      }
+      if (!sub) return null;
+
+      if (sub.type === "options") {
+        if (typeof v === "string" && sub.options.indexOf(v) !== -1) return v;
+        return null;
+      }
       return (v === "yes" || v === "no") ? v : null;
     });
   }
@@ -927,11 +546,8 @@
     if (!raw) return false;
 
     var data;
-    try {
-      data = JSON.parse(raw);
-    } catch (err) {
-      return false;
-    }
+    try { data = JSON.parse(raw); }
+    catch (err) { return false; }
 
     if (!data || !Array.isArray(data.sections) || data.sections.length === 0) {
       return false;
@@ -939,8 +555,8 @@
 
     suppressSave = true;
 
-    var used  = Object.create(null);
-    var maxId = 0;
+    var used   = Object.create(null);
+    var maxId  = 0;
     var staged = [];
 
     data.sections.forEach(function (raw2) {
@@ -954,12 +570,16 @@
       if (id > maxId) maxId = id;
       if (id) used[id] = true;
 
+      var openedAt = typeof raw2.openedAt === "string" ? raw2.openedAt : nowISO();
+      if (isNaN(new Date(openedAt).getTime())) openedAt = nowISO();
+
       staged.push({
         id: id,
         name: name,
         label: name,
-        values: normalizeValues(raw2.values),
-        subValues: normalizeValues(raw2.subValues)
+        openedAt: openedAt,
+        values: normalizeMainValues(raw2.values),
+        subValues: normalizeSubValues(raw2.subValues)
       });
     });
 
@@ -969,10 +589,7 @@
     }
 
     staged.forEach(function (s) {
-      if (!s.id) {
-        s.id = ++maxId;
-        used[s.id] = true;
-      }
+      if (!s.id) { s.id = ++maxId; used[s.id] = true; }
       mountSection(s);
     });
 
@@ -999,9 +616,9 @@
     saveNoteText.textContent = "Storage unavailable — answers won\u2019t persist";
   }
 
-  /* ---------------------------------------------------------
-     Add-bar state
-     --------------------------------------------------------- */
+  /* ==========================================================
+     Add-bar
+     ========================================================== */
 
   function updateAddState() {
     var hasValue = !!select.value;
@@ -1016,9 +633,9 @@
 
   select.addEventListener("change", updateAddState);
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Sections
-     --------------------------------------------------------- */
+     ========================================================== */
 
   function mountSection(section) {
     sections.push(section);
@@ -1056,6 +673,7 @@
       id: nextId++,
       name: name,
       label: name,
+      openedAt: nowISO(),
       values: CHECKS.map(function () { return null; }),
       subValues: CHECKS.map(function () { return null; })
     };
@@ -1065,9 +683,7 @@
     tabbarOuter.hidden = false;
     emptyEl.hidden = true;
     updateTabCount();
-
     refreshLabels();
-
     render(section.id);
     activate(section.id);
     saveState();
@@ -1131,9 +747,9 @@
     }
   }
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Duplicate-aware labels
-     --------------------------------------------------------- */
+     ========================================================== */
 
   function refreshLabels() {
     var counts = Object.create(null);
@@ -1151,7 +767,6 @@
       } else {
         label = s.name;
       }
-
       s.label = label;
 
       var tab = tabEls[s.id];
@@ -1159,14 +774,16 @@
         var nameEl = tab.querySelector(".tab__name");
         if (nameEl) nameEl.textContent = label;
         tab.setAttribute("aria-label", label + " checklist");
+        tab.title = label + " \u2014 opened " + formatOpened(s.openedAt);
       }
 
       var card = cardsById[s.id];
       if (card) {
         var titleEl = card.querySelector(".card__title");
         if (titleEl) titleEl.textContent = label;
+        var dateEl = card.querySelector("[data-opened]");
+        if (dateEl) dateEl.textContent = "Opened " + formatOpened(s.openedAt);
         card.setAttribute("aria-label", label + " checklist");
-
         var removeBtn = card.querySelector("[data-remove]");
         if (removeBtn) {
           removeBtn.title = "Remove " + label;
@@ -1176,9 +793,9 @@
     });
   }
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Tabs
-     --------------------------------------------------------- */
+     ========================================================== */
 
   function buildTab(section) {
     var tab = document.createElement("button");
@@ -1190,6 +807,7 @@
     tab.setAttribute("aria-controls", "panel-" + section.id);
     tab.setAttribute("aria-selected", "false");
     tab.setAttribute("aria-label", section.name + " checklist");
+    tab.title = section.name + " \u2014 opened " + formatOpened(section.openedAt);
     tab.tabIndex = -1;
 
     tab.innerHTML =
@@ -1201,7 +819,6 @@
 
   function activate(id) {
     if (!sectionsById[id]) return;
-
     activeId = id;
 
     sections.forEach(function (s) {
@@ -1224,21 +841,13 @@
 
   function scrollTabIntoView(tabEl) {
     if (!tabEl) return;
-
     var pad = 12;
     var tabRect = tabEl.getBoundingClientRect();
     var barRect = tabbar.getBoundingClientRect();
-
     if (tabRect.left < barRect.left + pad) {
-      tabbar.scrollBy({
-        left: tabRect.left - barRect.left - pad,
-        behavior: "smooth"
-      });
+      tabbar.scrollBy({ left: tabRect.left - barRect.left - pad, behavior: "smooth" });
     } else if (tabRect.right > barRect.right - pad) {
-      tabbar.scrollBy({
-        left: tabRect.right - barRect.right + pad,
-        behavior: "smooth"
-      });
+      tabbar.scrollBy({ left: tabRect.right - barRect.right + pad, behavior: "smooth" });
     }
   }
 
@@ -1250,70 +859,63 @@
 
   tabbar.addEventListener("keydown", function (event) {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-
     var ids = sections.map(function (s) { return s.id; });
     var idx = ids.indexOf(activeId);
     if (idx < 0) return;
-
     event.preventDefault();
-
-    var nextIdx =
-      event.key === "ArrowRight"
-        ? (idx + 1) % ids.length
-        : (idx - 1 + ids.length) % ids.length;
-
+    var nextIdx = event.key === "ArrowRight"
+      ? (idx + 1) % ids.length
+      : (idx - 1 + ids.length) % ids.length;
     activate(ids[nextIdx]);
     tabEls[ids[nextIdx]].focus();
   });
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Card construction
-     --------------------------------------------------------- */
+     ========================================================== */
 
   function optionConfig(check) {
     if (check.type === "direction") {
-      return {
-        arrow: true,
-        yes: "\u25B2",
-        no:  "\u25BC",
-        yesTitle: "Bullish (up)",
-        noTitle:  "Bearish (down)"
-      };
+      return { arrow: true, yes: "\u25B2", no: "\u25BC", yesTitle: "Bullish (up)", noTitle: "Bearish (down)" };
     }
-    return {
-      arrow: false,
-      yes: "\u2714",
-      no:  "\u2715",
-      yesTitle: "Met",
-      noTitle:  "Not met"
-    };
+    return { arrow: false, yes: "\u2714", no: "\u2715", yesTitle: "Met", noTitle: "Not met" };
   }
 
   function buildSubRow(check, i) {
-    var isOutcome = check.subType === "outcome";
+    var sub = null;
+    for (var k = 0; k < SUBS.length; k++) {
+      if (SUBS[k].parentIndex === i) { sub = SUBS[k]; break; }
+    }
+    if (!sub) return null;
 
     var subLi = document.createElement("li");
-    subLi.className = "item item--sub is-hidden";
     subLi.dataset.subFor = String(i);
 
-    var yesLabel = isOutcome ? "Profit" : "\u2714";
-    var noLabel  = isOutcome ? "Lost"   : "\u2715";
-    var yesTitle = isOutcome ? "Profit" : "Met";
-    var noTitle  = isOutcome ? "Lost"   : "Not met";
-    var textCls  = isOutcome ? " btn-check--text" : "";
-
-    subLi.innerHTML =
-      '<span class="item__num">' + (i + 1) + "a</span>" +
-      '<span class="item__text">' + escapeHtml(check.sub) + "</span>" +
-      '<span class="actions">' +
-        '<button type="button" class="btn-check btn-check--yes' + textCls +
-          '" data-sub="1" data-idx="' + i + '" data-val="yes" title="' + yesTitle +
-          '" aria-label="' + yesTitle + '" aria-pressed="false">' + yesLabel + "</button>" +
-        '<button type="button" class="btn-check btn-check--no' + textCls +
-          '" data-sub="1" data-idx="' + i + '" data-val="no" title="' + noTitle +
-          '" aria-label="' + noTitle + '" aria-pressed="false">' + noLabel + "</button>" +
-      "</span>";
-
+    if (sub.type === "options") {
+      subLi.className = "item item--sub item--multi is-hidden";
+      var optsHtml = "";
+      (sub.options || []).forEach(function (optLabel) {
+        optsHtml +=
+          '<button type="button" class="btn-option" data-sub="option" data-idx="' + i +
+          '" data-opt="' + escapeHtml(optLabel) + '" aria-pressed="false">' +
+          escapeHtml(optLabel) + "</button>";
+      });
+      subLi.innerHTML =
+        '<span class="item__num">' + (i + 1) + "a</span>" +
+        '<span class="item__text">' + escapeHtml(check.sub) + "</span>" +
+        '<div class="options">' + optsHtml + "</div>";
+    } else {
+      subLi.className = "item item--sub is-hidden";
+      subLi.innerHTML =
+        '<span class="item__num">' + (i + 1) + "a</span>" +
+        '<span class="item__text">' + escapeHtml(check.sub) + "</span>" +
+        '<span class="actions">' +
+          '<button type="button" class="btn-check btn-check--yes" data-sub="1" data-idx="' + i +
+            '" data-val="yes" title="Met" aria-label="Met" aria-pressed="false">\u2714</button>' +
+          '<button type="button" class="btn-check btn-check--no" data-sub="1" data-idx="' + i +
+            '" data-val="no" title="Not met" aria-label="Not met" aria-pressed="false">\u2715</button>' +
+        "</span>";
+    }
     return subLi;
   }
 
@@ -1326,12 +928,27 @@
     card.setAttribute("aria-labelledby", "tab-" + section.id);
     card.setAttribute("tabindex", "0");
 
+    /* Head */
     var head = document.createElement("div");
     head.className = "card__head";
+
+    var titleWrap = document.createElement("div");
+    titleWrap.className = "card__title-wrap";
 
     var title = document.createElement("h2");
     title.className = "card__title";
     title.textContent = section.name;
+
+    var date = document.createElement("div");
+    date.className = "card__date";
+    date.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+      '<span data-opened>Opened ' + escapeHtml(formatOpened(section.openedAt)) + "</span>";
+
+    titleWrap.appendChild(title);
+    titleWrap.appendChild(date);
 
     var right = document.createElement("div");
     right.className = "card__head-right";
@@ -1350,15 +967,15 @@
 
     right.appendChild(count);
     right.appendChild(remove);
-    head.appendChild(title);
+    head.appendChild(titleWrap);
     head.appendChild(right);
 
+    /* List */
     var list = document.createElement("ul");
     list.className = "list";
 
     CHECKS.forEach(function (check, i) {
       var cfg = optionConfig(check);
-
       var li = document.createElement("li");
       li.className = "item";
       li.innerHTML =
@@ -1377,10 +994,12 @@
       list.appendChild(li);
 
       if (check.sub) {
-        list.appendChild(buildSubRow(check, i));
+        var subLi = buildSubRow(check, i);
+        if (subLi) list.appendChild(subLi);
       }
     });
 
+    /* Foot */
     var foot = document.createElement("div");
     foot.className = "card__foot";
     foot.innerHTML =
@@ -1394,15 +1013,18 @@
     return card;
   }
 
-  /* ---------------------------------------------------------
-     Delegated clicks
-     --------------------------------------------------------- */
+  /* ==========================================================
+     Click handling
+     ========================================================== */
 
   panels.addEventListener("click", function (event) {
     var card = event.target.closest(".card");
     if (!card) return;
 
     var id = Number(card.dataset.id);
+
+    var optionBtn = event.target.closest(".btn-option");
+    if (optionBtn) { handleOptionCheck(id, optionBtn); return; }
 
     var checkBtn = event.target.closest(".btn-check");
     if (checkBtn) {
@@ -1431,14 +1053,12 @@
 
   function handleCheck(id, btn) {
     if (btn.disabled) return;
-
     var section = sectionsById[id];
     if (!section) return;
 
     var idx = Number(btn.dataset.idx);
     var val = btn.dataset.val;
     var current = section.values[idx];
-
     section.values[idx] = (current === val) ? null : val;
 
     render(id);
@@ -1447,7 +1067,6 @@
 
   function handleSubCheck(id, btn) {
     if (btn.disabled) return;
-
     var section = sectionsById[id];
     if (!section) return;
 
@@ -1456,16 +1075,31 @@
 
     var val = btn.dataset.val;
     var current = section.subValues[idx];
-
     section.subValues[idx] = (current === val) ? null : val;
 
     render(id);
     saveState();
   }
 
-  /* ---------------------------------------------------------
+  function handleOptionCheck(id, btn) {
+    if (btn.disabled) return;
+    var section = sectionsById[id];
+    if (!section) return;
+
+    var idx = Number(btn.dataset.idx);
+    if (section.values[idx] !== "yes") return;
+
+    var opt = btn.dataset.opt;
+    var current = section.subValues[idx];
+    section.subValues[idx] = (current === opt) ? null : opt;
+
+    render(id);
+    saveState();
+  }
+
+  /* ==========================================================
      Counters
-     --------------------------------------------------------- */
+     ========================================================== */
 
   function subVisible(section, parentIndex) {
     return section.values[parentIndex] === "yes";
@@ -1483,22 +1117,23 @@
     return TOTAL + visibleSubCount(section);
   }
 
+  function subAnswered(section, sub) {
+    var v = section.subValues[sub.parentIndex];
+    if (sub.type === "options") return typeof v === "string" && v.length > 0;
+    return v === "yes" || v === "no";
+  }
+
   function answeredCount(section) {
     var done = section.values.filter(function (v) { return v !== null; }).length;
-
     SUBS.forEach(function (s) {
-      if (subVisible(section, s.parentIndex) &&
-          section.subValues[s.parentIndex] !== null) {
-        done++;
-      }
+      if (subVisible(section, s.parentIndex) && subAnswered(section, s)) done++;
     });
-
     return done;
   }
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Render
-     --------------------------------------------------------- */
+     ========================================================== */
 
   function render(id) {
     var section = sectionsById[id];
@@ -1507,18 +1142,19 @@
 
     var values = section.values;
 
+    // Wipe any sub whose parent is not "yes"
     SUBS.forEach(function (s) {
       if (values[s.parentIndex] !== "yes") {
         section.subValues[s.parentIndex] = null;
       }
     });
 
+    // Main rows
     var mainItems = card.querySelectorAll(".item:not(.item--sub)");
     mainItems.forEach(function (item, i) {
       var val = values[i];
       var yes = item.querySelector(".btn-check--yes");
       var no  = item.querySelector(".btn-check--no");
-
       var isYes = val === "yes";
       var isNo  = val === "no";
 
@@ -1530,6 +1166,7 @@
       no.disabled  = isYes;
     });
 
+    // Sub rows
     SUBS.forEach(function (s) {
       var subLi = card.querySelector('.item--sub[data-sub-for="' + s.parentIndex + '"]');
       if (!subLi) return;
@@ -1537,21 +1174,32 @@
       var show = subVisible(section, s.parentIndex);
       subLi.classList.toggle("is-hidden", !show);
 
-      var subVal = section.subValues[s.parentIndex];
-      var sYes = subLi.querySelector(".btn-check--yes");
-      var sNo  = subLi.querySelector(".btn-check--no");
+      if (s.type === "options") {
+        var currentOpt = section.subValues[s.parentIndex];
+        var optBtns = subLi.querySelectorAll(".btn-option");
+        optBtns.forEach(function (btn) {
+          var isActive = btn.dataset.opt === currentOpt;
+          btn.classList.toggle("active", isActive);
+          btn.setAttribute("aria-pressed", String(isActive));
+          btn.disabled = !show;   // only enabled while the parent is "yes"
+        });
+      } else {
+        var subVal = section.subValues[s.parentIndex];
+        var sYes = subLi.querySelector(".btn-check--yes");
+        var sNo  = subLi.querySelector(".btn-check--no");
+        var sIsYes = subVal === "yes";
+        var sIsNo  = subVal === "no";
 
-      var sIsYes = subVal === "yes";
-      var sIsNo  = subVal === "no";
-
-      sYes.classList.toggle("active", sIsYes);
-      sNo.classList.toggle("active", sIsNo);
-      sYes.setAttribute("aria-pressed", String(sIsYes));
-      sNo.setAttribute("aria-pressed", String(sIsNo));
-      sYes.disabled = sIsNo;
-      sNo.disabled  = sIsYes;
+        sYes.classList.toggle("active", sIsYes);
+        sNo.classList.toggle("active", sIsNo);
+        sYes.setAttribute("aria-pressed", String(sIsYes));
+        sNo.setAttribute("aria-pressed", String(sIsNo));
+        sYes.disabled = sIsNo;
+        sNo.disabled  = sIsYes;
+      }
     });
 
+    // Counters
     var total = visibleTotal(section);
     var done  = answeredCount(section);
 
@@ -1567,23 +1215,14 @@
     }
   }
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Copy
-     --------------------------------------------------------- */
-
-  function subMark(check, subVal) {
-    if (check.subType === "outcome") {
-      return subVal === "yes" ? MARK.profit
-           : subVal === "no"  ? MARK.lost
-           : MARK.none;
-    }
-    return subVal === "yes" ? MARK.yes
-         : subVal === "no"  ? MARK.no
-         : MARK.none;
-  }
+     ========================================================== */
 
   function formatChecklist(section) {
     var lines = [section.label || section.name];
+    lines.push("Opened: " + formatOpened(section.openedAt));
+    lines.push("");
 
     section.values.forEach(function (val, i) {
       var check = CHECKS[i];
@@ -1602,10 +1241,25 @@
       lines.push((i + 1) + ". " + check.text + " " + mark + (check.suffix || ""));
 
       if (check.sub && val === "yes") {
-        lines.push(
-          "   " + (i + 1) + "a. " + check.sub + " " +
-          subMark(check, section.subValues[i])
-        );
+        var sub = null;
+        for (var k = 0; k < SUBS.length; k++) {
+          if (SUBS[k].parentIndex === i) { sub = SUBS[k]; break; }
+        }
+        if (!sub) return;
+
+        var subVal = section.subValues[i];
+
+        if (sub.type === "options") {
+          lines.push(
+            "   " + (i + 1) + "a. " + check.sub + ": " +
+            (typeof subVal === "string" && subVal ? subVal : "(not selected)")
+          );
+        } else {
+          var subMark = subVal === "yes" ? MARK.yes
+                      : subVal === "no"  ? MARK.no
+                      : MARK.none;
+          lines.push("   " + (i + 1) + "a. " + check.sub + " " + subMark);
+        }
       }
     });
 
@@ -1621,7 +1275,6 @@
     copyToClipboard(text).then(function (ok) {
       btn.textContent = ok ? "Copied \u2713" : "Copy failed";
       btn.classList.add(ok ? "is-ok" : "is-err");
-
       clearTimeout(btn._resetTimer);
       btn._resetTimer = setTimeout(function () {
         btn.textContent = "Copy checklist";
@@ -1650,10 +1303,8 @@
       ta.style.left = "-1000px";
       ta.style.opacity = "0";
       document.body.appendChild(ta);
-
       ta.select();
       ta.setSelectionRange(0, ta.value.length);
-
       var ok = document.execCommand("copy");
       document.body.removeChild(ta);
       return ok;
@@ -1662,9 +1313,9 @@
     }
   }
 
-  /* ---------------------------------------------------------
+  /* ==========================================================
      Helpers
-     --------------------------------------------------------- */
+     ========================================================== */
 
   var toastTimer = null;
 
@@ -1672,7 +1323,6 @@
     toastEl.textContent = message;
     toastEl.classList.toggle("is-error", !!isError);
     toastEl.classList.add("is-visible");
-
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () {
       toastEl.classList.remove("is-visible");
@@ -1687,15 +1337,14 @@
       .replace(/"/g, "&quot;");
   }
 
-  /* ---------------------------------------------------------
-     Init — restore cached work, or show the empty state
-     --------------------------------------------------------- */
+  /* ==========================================================
+     Init
+     ========================================================== */
 
   updateAddState();
   tabCount.hidden = true;
 
   var restored = loadState();
-
   if (!restored) {
     tabbarOuter.hidden = true;
     emptyEl.hidden = false;
