@@ -39,8 +39,50 @@
     overscroll-behavior-y: none;
   }
 
+  /* Note banner */
+  .note-banner {
+    max-width: var(--panel-w);
+    margin: 16px auto 0;
+    padding: 0 24px;
+  }
+  .note-banner__inner {
+    background: linear-gradient(135deg, rgba(31,111,235,.12), rgba(31,111,235,.04));
+    border: 1px solid rgba(56,139,253,.35);
+    border-left: 3px solid var(--blue-bright);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .note-banner__icon {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(56,139,253,.18);
+    display: grid;
+    place-items: center;
+    font-size: .72rem;
+    font-weight: 800;
+    color: #79b8ff;
+    margin-top: 1px;
+  }
+  .note-banner__text {
+    font-size: .84rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #c9d9f0;
+    letter-spacing: .01em;
+  }
+  .note-banner__text b {
+    color: #79b8ff;
+    font-weight: 700;
+    letter-spacing: .03em;
+  }
+
   /* Header */
-  .header { max-width: var(--panel-w); margin: 0 auto; padding: 28px 24px 16px; }
+  .header { max-width: var(--panel-w); margin: 0 auto; padding: 20px 24px 16px; }
   .header h1 { margin: 0 0 6px; font-size: 1.32rem; letter-spacing: .02em; font-weight: 700; }
   .header p { margin: 0; font-size: .84rem; color: var(--muted); line-height: 1.55; }
   .header p b { color: #b9c6d6; font-weight: 600; }
@@ -250,6 +292,64 @@
     border-color: #222a36; color: #55606e; box-shadow: none;
   }
 
+  /* Result row (only visible when Entry = yes) */
+  .item--result {
+    display: none;
+    margin-top: 4px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(56,139,253,.35);
+    background: linear-gradient(135deg, rgba(31,111,235,.1), rgba(31,111,235,.03));
+    animation: subIn .2s ease-out;
+  }
+  .item--result.is-visible { display: block; }
+  .item--result .result-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: .82rem; font-weight: 700; letter-spacing: .04em;
+    color: #c9d9f0; margin-bottom: 10px;
+  }
+  .item--result .result-label .num-badge {
+    font-size: .68rem; font-weight: 800; color: #79b8ff;
+    background: rgba(56,139,253,.2); border: 1px solid rgba(56,139,253,.35);
+    border-radius: 6px; padding: 2px 6px; letter-spacing: 0;
+  }
+  .result-actions { display: flex; gap: 8px; }
+  .btn-result {
+    flex: 1;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #2b3546;
+    background: #1a212b;
+    color: #8b98a9;
+    font-family: inherit;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background .15s, border-color .15s, color .15s, opacity .15s, transform .08s;
+  }
+  .btn-result:hover:not(:disabled) { border-color: #3c4a5f; color: #cfd8e3; }
+  .btn-result:active:not(:disabled) { transform: scale(.97); }
+  .btn-result:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .btn-result--profit.active {
+    background: rgba(46,160,67,.2); border-color: var(--green); color: var(--green-bright);
+    box-shadow: inset 0 0 0 1px rgba(46,160,67,.3);
+  }
+  .btn-result--loss.active {
+    background: rgba(218,54,51,.18); border-color: var(--red); color: var(--red-bright);
+    box-shadow: inset 0 0 0 1px rgba(218,54,51,.3);
+  }
+  .btn-result:disabled {
+    opacity: .3; cursor: not-allowed; background: #151a21;
+    border-color: #222a36; color: #55606e; box-shadow: none;
+  }
+
   /* Footer */
   .card__foot {
     display: flex; gap: 10px; margin-top: 14px; padding-top: 14px;
@@ -286,7 +386,10 @@
   /* Mobile */
   @media (max-width: 640px) {
     :root { --check: 42px; }
-    .header { padding: 20px 16px 12px; }
+    .note-banner { padding: 0 16px; margin-top: 12px; }
+    .note-banner__inner { padding: 11px 13px; gap: 10px; }
+    .note-banner__text { font-size: .8rem; }
+    .header { padding: 16px 16px 12px; }
     .header h1 { font-size: 1.15rem; }
     .header p { font-size: .8rem; }
     .save-note { font-size: .72rem; }
@@ -311,6 +414,8 @@
     .item--multi .item__text { flex-basis: calc(100% - 30px); padding-top: 0; }
     .item--multi .options { flex-basis: 100%; justify-content: flex-start; padding-left: 22px; margin-top: 6px; }
     .btn-option { height: 34px; font-size: .76rem; padding: 0 12px; }
+    .item--result { padding: 12px 13px; }
+    .btn-result { height: 44px; font-size: .8rem; }
   }
   @media (max-width: 360px) {
     .item__text { font-size: .82rem; }
@@ -326,6 +431,16 @@
 </style>
 </head>
 <body>
+
+  <!-- Note banner -->
+  <div class="note-banner">
+    <div class="note-banner__inner">
+      <span class="note-banner__icon" aria-hidden="true">i</span>
+      <div class="note-banner__text">
+        <b>4H liquidity sweep &rarr; CHoCH &rarr; TrendTracker</b> in the direction of the CHoCH
+      </div>
+    </div>
+  </div>
 
   <header class="header">
     <h1>Trading Checklist</h1>
@@ -366,7 +481,7 @@
      Configuration
      ========================================================== */
 
-  var STORAGE_KEY = "trading-checklist-v2";
+  var STORAGE_KEY = "trading-checklist-v3";
 
   var CHECKS = [
     { text: "Market Structure", type: "direction" },
@@ -374,27 +489,21 @@
     { text: "BOS/CHoCH with imbalance" },
     { text: "BOS/CHoCH with displacement" },
     { text: "Liquidity sweep before OB" },
-    { text: "OB in correct side of the fib (buy discount,sell premium)" },
+    { text: "OB in correct side of the fib (buy discount, sell premium)" },
     { text: "FVG immediately after OB" },
     { text: "OB is supported with Volume POI/VAs" },
     { text: "Session liquidity available around",
-      suffix: " (if there is session liquidity available then it need to be taken out)",
       sub: "Session liquidity sweep" },
     { text: "Entry",
-      sub: "Entry type",
-      subType: "options",
-      subOptions: ["FVG", "Body of OB", "Wick of OB", "0.5 of OB"] }
+      subBuySell: ["Buy", "Sell"],
+      subEntryTypes: ["FVG", "Body of OB", "Wick of OB", "0.5 of OB"] },
+    { text: "Result: Profit/Lost",
+      isResult: true,
+      subOptions: ["Profit", "Lost"] }
   ];
 
   var PAIR_GROUPS = [
-    { group: "Majors", pairs: ["EURUSD","GBPUSD","USDJPY"] }, /*
-    { group: "Crosses", pairs: [
-      "EURGBP","EURJPY","EURCHF","EURAUD","EURNZD","EURCAD",
-      "GBPJPY","GBPCHF","GBPAUD","GBPCAD","GBPNZD",
-      "AUDJPY","AUDCAD","AUDCHF","AUDNZD",
-      "NZDJPY","NZDCAD","NZDCHF",
-      "CADJPY","CADCHF","CHFJPY"
-    ]}, */
+    { group: "Majors", pairs: ["EURUSD","GBPUSD","USDJPY"] },
     { group: "Metals", pairs: ["XAUUSD","XAGUSD"] }
   ];
 
@@ -403,21 +512,13 @@
     no:  "\u274C\uFE0F",
     up:  "\u2B06\uFE0F",
     down:"\u2B07\uFE0F",
-    none:"\u2B1C"
+    none:"\u2B1C",
+    profit: "\uD83D\uDFE2",
+    lost:   "\uD83D\uDD34"
   };
 
-  var TOTAL = CHECKS.length;
-
-  var SUBS = [];
-  CHECKS.forEach(function (c, i) {
-    if (c.sub) {
-      SUBS.push({
-        parentIndex: i,
-        type: c.subType || "binary",
-        options: c.subOptions || null
-      });
-    }
-  });
+  // Base visible rows = every checkpoint except the Result row
+  var BASE_VISIBLE = CHECKS.filter(function (c) { return !c.isResult; }).length;
 
   /* ==========================================================
      State
@@ -445,8 +546,6 @@
   var select       = document.getElementById("pairSelect");
   var addBtn       = document.getElementById("addBtn");
   var toastEl      = document.getElementById("toast");
-  var saveNote     = document.getElementById("saveNote");
-  var saveNoteText = document.getElementById("saveNoteText");
 
   /* ==========================================================
      Date helpers
@@ -466,7 +565,7 @@
   }
 
   /* ==========================================================
-     Populate dropdown
+     Dropdown
      ========================================================== */
 
   PAIR_GROUPS.forEach(function (group) {
@@ -487,9 +586,8 @@
 
   function saveState() {
     if (suppressSave || !storageOK) return;
-
     var payload = {
-      v: 2,
+      v: 3,
       activeId: activeId,
       sections: sections.map(function (s) {
         return {
@@ -497,11 +595,13 @@
           name: s.name,
           openedAt: s.openedAt,
           values: s.values,
-          subValues: s.subValues
+          subValues: s.subValues,
+          decision: s.decision,
+          entryType: s.entryType,
+          result: s.result
         };
       })
     };
-
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (err) {
@@ -519,30 +619,15 @@
   function normalizeSubValues(arr) {
     return CHECKS.map(function (check, i) {
       var v = Array.isArray(arr) ? arr[i] : null;
-      var sub = null;
-      for (var k = 0; k < SUBS.length; k++) {
-        if (SUBS[k].parentIndex === i) { sub = SUBS[k]; break; }
-      }
-      if (!sub) return null;
-
-      if (sub.type === "options") {
-        if (typeof v === "string" && sub.options.indexOf(v) !== -1) return v;
-        return null;
-      }
+      if (!check.sub) return null;
       return (v === "yes" || v === "no") ? v : null;
     });
   }
 
   function loadState() {
     var raw = null;
-
-    try {
-      raw = window.localStorage.getItem(STORAGE_KEY);
-    } catch (err) {
-      markStorageUnavailable();
-      return false;
-    }
-
+    try { raw = window.localStorage.getItem(STORAGE_KEY); }
+    catch (err) { markStorageUnavailable(); return false; }
     if (!raw) return false;
 
     var data;
@@ -561,7 +646,6 @@
 
     data.sections.forEach(function (raw2) {
       if (!raw2 || typeof raw2.name !== "string") return;
-
       var name = raw2.name.trim();
       if (!name) return;
 
@@ -579,7 +663,10 @@
         label: name,
         openedAt: openedAt,
         values: normalizeMainValues(raw2.values),
-        subValues: normalizeSubValues(raw2.subValues)
+        subValues: normalizeSubValues(raw2.subValues),
+        decision: (raw2.decision === "Buy" || raw2.decision === "Sell") ? raw2.decision : null,
+        entryType: CHECKS[9].subEntryTypes.indexOf(raw2.entryType) !== -1 ? raw2.entryType : null,
+        result: (raw2.result === "Profit" || raw2.result === "Lost") ? raw2.result : null
       });
     });
 
@@ -612,8 +699,10 @@
 
   function markStorageUnavailable() {
     storageOK = false;
-    saveNote.classList.add("is-off");
-    saveNoteText.textContent = "Storage unavailable — answers won\u2019t persist";
+    var note = document.getElementById("saveNote");
+    if (note) note.classList.add("is-off");
+    var noteText = document.getElementById("saveNoteText");
+    if (noteText) noteText.textContent = "Storage unavailable — answers won\u2019t persist";
   }
 
   /* ==========================================================
@@ -652,20 +741,12 @@
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
-
     var name = select.value;
-    if (!name) {
-      showToast("Select a pair first.", true);
-      return;
-    }
+    if (!name) { showToast("Select a pair first.", true); return; }
 
     var section = addSection(name);
     resetSelect();
-
-    showToast(
-      section.label + " added \u00B7 " +
-      sections.length + (sections.length === 1 ? " tab" : " tabs")
-    );
+    showToast(section.label + " added \u00B7 " + sections.length + (sections.length === 1 ? " tab" : " tabs"));
   });
 
   function addSection(name) {
@@ -675,11 +756,13 @@
       label: name,
       openedAt: nowISO(),
       values: CHECKS.map(function () { return null; }),
-      subValues: CHECKS.map(function () { return null; })
+      subValues: CHECKS.map(function () { return null; }),
+      decision: null,
+      entryType: null,
+      result: null
     };
 
     mountSection(section);
-
     tabbarOuter.hidden = false;
     emptyEl.hidden = true;
     updateTabCount();
@@ -687,7 +770,6 @@
     render(section.id);
     activate(section.id);
     saveState();
-
     return section;
   }
 
@@ -729,11 +811,7 @@
     }
 
     refreshLabels();
-
-    if (activeId === id) {
-      activate(neighbour ? neighbour.id : sections[0].id);
-    }
-
+    if (activeId === id) activate(neighbour ? neighbour.id : sections[0].id);
     updateAddState();
     saveState();
   }
@@ -753,9 +831,7 @@
 
   function refreshLabels() {
     var counts = Object.create(null);
-    sections.forEach(function (s) {
-      counts[s.name] = (counts[s.name] || 0) + 1;
-    });
+    sections.forEach(function (s) { counts[s.name] = (counts[s.name] || 0) + 1; });
 
     var seen = Object.create(null);
 
@@ -809,11 +885,9 @@
     tab.setAttribute("aria-label", section.name + " checklist");
     tab.title = section.name + " \u2014 opened " + formatOpened(section.openedAt);
     tab.tabIndex = -1;
-
     tab.innerHTML =
       '<span class="tab__name">' + escapeHtml(section.name) + "</span>" +
-      '<span class="tab__count">0/' + TOTAL + "</span>";
-
+      '<span class="tab__count">0/' + BASE_VISIBLE + "</span>";
     return tab;
   }
 
@@ -823,14 +897,12 @@
 
     sections.forEach(function (s) {
       var isActive = s.id === id;
-
       var tab = tabEls[s.id];
       if (tab) {
         tab.classList.toggle("is-active", isActive);
         tab.setAttribute("aria-selected", String(isActive));
         tab.tabIndex = isActive ? 0 : -1;
       }
-
       var card = cardsById[s.id];
       if (card) card.classList.toggle("is-hidden", !isActive);
     });
@@ -882,41 +954,50 @@
   }
 
   function buildSubRow(check, i) {
-    var sub = null;
-    for (var k = 0; k < SUBS.length; k++) {
-      if (SUBS[k].parentIndex === i) { sub = SUBS[k]; break; }
-    }
-    if (!sub) return null;
-
     var subLi = document.createElement("li");
     subLi.dataset.subFor = String(i);
-
-    if (sub.type === "options") {
-      subLi.className = "item item--sub item--multi is-hidden";
-      var optsHtml = "";
-      (sub.options || []).forEach(function (optLabel) {
-        optsHtml +=
-          '<button type="button" class="btn-option" data-sub="option" data-idx="' + i +
-          '" data-opt="' + escapeHtml(optLabel) + '" aria-pressed="false">' +
-          escapeHtml(optLabel) + "</button>";
-      });
-      subLi.innerHTML =
-        '<span class="item__num">' + (i + 1) + "a</span>" +
-        '<span class="item__text">' + escapeHtml(check.sub) + "</span>" +
-        '<div class="options">' + optsHtml + "</div>";
-    } else {
-      subLi.className = "item item--sub is-hidden";
-      subLi.innerHTML =
-        '<span class="item__num">' + (i + 1) + "a</span>" +
-        '<span class="item__text">' + escapeHtml(check.sub) + "</span>" +
-        '<span class="actions">' +
-          '<button type="button" class="btn-check btn-check--yes" data-sub="1" data-idx="' + i +
-            '" data-val="yes" title="Met" aria-label="Met" aria-pressed="false">\u2714</button>' +
-          '<button type="button" class="btn-check btn-check--no" data-sub="1" data-idx="' + i +
-            '" data-val="no" title="Not met" aria-label="Not met" aria-pressed="false">\u2715</button>' +
-        "</span>";
-    }
+    subLi.className = "item item--sub is-hidden";
+    subLi.innerHTML =
+      '<span class="item__num">' + (i + 1) + "a</span>" +
+      '<span class="item__text">' + escapeHtml(check.sub) + "</span>" +
+      '<span class="actions">' +
+        '<button type="button" class="btn-check btn-check--yes" data-sub="1" data-idx="' + i +
+          '" data-val="yes" title="Met" aria-label="Met" aria-pressed="false">\u2714</button>' +
+        '<button type="button" class="btn-check btn-check--no" data-sub="1" data-idx="' + i +
+          '" data-val="no" title="Not met" aria-label="Not met" aria-pressed="false">\u2715</button>' +
+      "</span>";
     return subLi;
+  }
+
+  function buildEntrySubRows(check, i) {
+    // Decision row
+    var decisionLi = document.createElement("li");
+    decisionLi.className = "item item--sub item--multi is-hidden";
+    decisionLi.dataset.entryFor = String(i);
+    decisionLi.innerHTML =
+      '<span class="item__num">' + (i + 1) + "a</span>" +
+      '<span class="item__text">Decision</span>' +
+      '<div class="options">' +
+        '<button type="button" class="btn-option" data-entry="decision" data-opt="Buy" aria-pressed="false">Buy</button>' +
+        '<button type="button" class="btn-option" data-entry="decision" data-opt="Sell" aria-pressed="false">Sell</button>' +
+      "</div>";
+
+    // Entry type row
+    var entryTypeLi = document.createElement("li");
+    entryTypeLi.className = "item item--sub item--multi is-hidden";
+    entryTypeLi.dataset.entryTypeFor = String(i);
+    var typeHtml = "";
+    (check.subEntryTypes || []).forEach(function (optLabel) {
+      typeHtml +=
+        '<button type="button" class="btn-option" data-entry="entryType" data-opt="' +
+        escapeHtml(optLabel) + '" aria-pressed="false">' + escapeHtml(optLabel) + "</button>";
+    });
+    entryTypeLi.innerHTML =
+      '<span class="item__num">' + (i + 1) + "b</span>" +
+      '<span class="item__text">Entry type</span>' +
+      '<div class="options">' + typeHtml + "</div>";
+
+    return [decisionLi, entryTypeLi];
   }
 
   function buildCard(section) {
@@ -975,6 +1056,27 @@
     list.className = "list";
 
     CHECKS.forEach(function (check, i) {
+      if (check.isResult) {
+        var resultLi = document.createElement("li");
+        resultLi.className = "item--result";
+        resultLi.dataset.resultFor = String(i);
+        resultLi.innerHTML =
+          '<div class="result-label">' +
+            '<span class="num-badge">' + (i + 1) + '</span>' +
+            '<span>' + escapeHtml(check.text) + '</span>' +
+          '</div>' +
+          '<div class="result-actions">' +
+            '<button type="button" class="btn-result btn-result--profit" data-result="Profit" aria-pressed="false">' +
+              '\uD83D\uDFE2 Profit' +
+            '</button>' +
+            '<button type="button" class="btn-result btn-result--loss" data-result="Lost" aria-pressed="false">' +
+              '\uD83D\uDD34 Lost' +
+            '</button>' +
+          '</div>';
+        list.appendChild(resultLi);
+        return;
+      }
+
       var cfg = optionConfig(check);
       var li = document.createElement("li");
       li.className = "item";
@@ -994,8 +1096,11 @@
       list.appendChild(li);
 
       if (check.sub) {
-        var subLi = buildSubRow(check, i);
-        if (subLi) list.appendChild(subLi);
+        list.appendChild(buildSubRow(check, i));
+      }
+      if (check.subBuySell) {
+        var entryRows = buildEntrySubRows(check, i);
+        entryRows.forEach(function (row) { list.appendChild(row); });
       }
     });
 
@@ -1020,11 +1125,13 @@
   panels.addEventListener("click", function (event) {
     var card = event.target.closest(".card");
     if (!card) return;
-
     var id = Number(card.dataset.id);
 
-    var optionBtn = event.target.closest(".btn-option");
-    if (optionBtn) { handleOptionCheck(id, optionBtn); return; }
+    var resultBtn = event.target.closest("[data-result]");
+    if (resultBtn) { handleResult(id, resultBtn); return; }
+
+    var optionBtn = event.target.closest(".btn-option[data-entry]");
+    if (optionBtn) { handleEntryOption(id, optionBtn); return; }
 
     var checkBtn = event.target.closest(".btn-check");
     if (checkBtn) {
@@ -1042,6 +1149,9 @@
       if (!section) return;
       section.values = CHECKS.map(function () { return null; });
       section.subValues = CHECKS.map(function () { return null; });
+      section.decision = null;
+      section.entryType = null;
+      section.result = null;
       render(id);
       saveState();
       return;
@@ -1055,11 +1165,17 @@
     if (btn.disabled) return;
     var section = sectionsById[id];
     if (!section) return;
-
     var idx = Number(btn.dataset.idx);
     var val = btn.dataset.val;
     var current = section.values[idx];
     section.values[idx] = (current === val) ? null : val;
+
+    // Unticking Entry clears every Entry sub-answer, including Result
+    if (idx === 9 && section.values[idx] !== "yes") {
+      section.decision  = null;
+      section.entryType = null;
+      section.result    = null;
+    }
 
     render(id);
     saveState();
@@ -1069,65 +1185,92 @@
     if (btn.disabled) return;
     var section = sectionsById[id];
     if (!section) return;
-
     var idx = Number(btn.dataset.idx);
     if (section.values[idx] !== "yes") return;
-
     var val = btn.dataset.val;
     var current = section.subValues[idx];
     section.subValues[idx] = (current === val) ? null : val;
-
     render(id);
     saveState();
   }
 
-  function handleOptionCheck(id, btn) {
+  function handleEntryOption(id, btn) {
     if (btn.disabled) return;
     var section = sectionsById[id];
     if (!section) return;
-
-    var idx = Number(btn.dataset.idx);
+    var idx = 9;
     if (section.values[idx] !== "yes") return;
 
+    var kind = btn.dataset.entry;
     var opt = btn.dataset.opt;
-    var current = section.subValues[idx];
-    section.subValues[idx] = (current === opt) ? null : opt;
 
+    if (kind === "decision") {
+      section.decision = (section.decision === opt) ? null : opt;
+    } else if (kind === "entryType") {
+      section.entryType = (section.entryType === opt) ? null : opt;
+    }
+    render(id);
+    saveState();
+  }
+
+  function handleResult(id, btn) {
+    if (btn.disabled) return;
+    var section = sectionsById[id];
+    if (!section) return;
+    if (section.values[9] !== "yes") return;
+    var opt = btn.dataset.result;
+    section.result = (section.result === opt) ? null : opt;
     render(id);
     saveState();
   }
 
   /* ==========================================================
-     Counters
+     Counters — numerator and denominator track the SAME
+     set of currently visible checkpoints.
      ========================================================== */
 
-  function subVisible(section, parentIndex) {
-    return section.values[parentIndex] === "yes";
-  }
-
-  function visibleSubCount(section) {
-    var n = 0;
-    SUBS.forEach(function (s) {
-      if (subVisible(section, s.parentIndex)) n++;
-    });
-    return n;
+  function resultVisible(section) {
+    return section.values[9] === "yes";
   }
 
   function visibleTotal(section) {
-    return TOTAL + visibleSubCount(section);
-  }
+    var total = BASE_VISIBLE;                       // 10 base rows
+    if (resultVisible(section)) total += 1;         // Result
 
-  function subAnswered(section, sub) {
-    var v = section.subValues[sub.parentIndex];
-    if (sub.type === "options") return typeof v === "string" && v.length > 0;
-    return v === "yes" || v === "no";
+    // + every visible sub-checkpoint
+    CHECKS.forEach(function (check, i) {
+      if (check.sub && section.values[i] === "yes") total += 1;
+    });
+    if (section.values[9] === "yes") {
+      total += 1;                                   // Decision
+      total += 1;                                   // Entry type
+    }
+    return total;
   }
 
   function answeredCount(section) {
-    var done = section.values.filter(function (v) { return v !== null; }).length;
-    SUBS.forEach(function (s) {
-      if (subVisible(section, s.parentIndex) && subAnswered(section, s)) done++;
+    var done = 0;
+
+    // Base rows (1..10)
+    for (var i = 0; i < BASE_VISIBLE; i++) {
+      if (section.values[i] !== null) done++;
+    }
+
+    // Visible sub rows (Session sweep, Decision, Entry type)
+    CHECKS.forEach(function (check, i) {
+      if (check.sub && section.values[i] === "yes" &&
+          section.subValues[i] !== null) {
+        done++;
+      }
     });
+    if (section.values[9] === "yes") {
+      if (section.decision)  done++;
+      if (section.entryType) done++;
+    }
+
+    // Result (only if Entry = yes)
+    if (resultVisible(section) && section.result) done++;
+
     return done;
   }
 
@@ -1140,24 +1283,29 @@
     var card = cardsById[id];
     if (!section || !card) return;
 
-    var values = section.values;
-
-    // Wipe any sub whose parent is not "yes"
-    SUBS.forEach(function (s) {
-      if (values[s.parentIndex] !== "yes") {
-        section.subValues[s.parentIndex] = null;
+    // Wipe sub-values whose parent isn't "yes"
+    CHECKS.forEach(function (check, i) {
+      if (check.sub && section.values[i] !== "yes") {
+        section.subValues[i] = null;
       }
     });
+
+    // Wipe Entry sub-state when Entry isn't "yes"
+    if (section.values[9] !== "yes") {
+      section.decision  = null;
+      section.entryType = null;
+      section.result    = null;
+    }
 
     // Main rows
     var mainItems = card.querySelectorAll(".item:not(.item--sub)");
     mainItems.forEach(function (item, i) {
-      var val = values[i];
+      var val = section.values[i];
       var yes = item.querySelector(".btn-check--yes");
       var no  = item.querySelector(".btn-check--no");
+      if (!yes || !no) return;
       var isYes = val === "yes";
       var isNo  = val === "no";
-
       yes.classList.toggle("active", isYes);
       no.classList.toggle("active", isNo);
       yes.setAttribute("aria-pressed", String(isYes));
@@ -1166,38 +1314,65 @@
       no.disabled  = isYes;
     });
 
-    // Sub rows
-    SUBS.forEach(function (s) {
-      var subLi = card.querySelector('.item--sub[data-sub-for="' + s.parentIndex + '"]');
-      if (!subLi) return;
+    // Session liquidity sweep sub-row
+    var sweepLi = card.querySelector('.item--sub[data-sub-for="8"]');
+    if (sweepLi) {
+      var sweepShow = section.values[8] === "yes";
+      sweepLi.classList.toggle("is-hidden", !sweepShow);
+      var sweepVal = section.subValues[8];
+      var sYes = sweepLi.querySelector(".btn-check--yes");
+      var sNo  = sweepLi.querySelector(".btn-check--no");
+      var sIsYes = sweepVal === "yes";
+      var sIsNo  = sweepVal === "no";
+      sYes.classList.toggle("active", sIsYes);
+      sNo.classList.toggle("active", sIsNo);
+      sYes.setAttribute("aria-pressed", String(sIsYes));
+      sNo.setAttribute("aria-pressed", String(sIsNo));
+      sYes.disabled = sIsNo;
+      sNo.disabled  = sIsYes;
+    }
 
-      var show = subVisible(section, s.parentIndex);
-      subLi.classList.toggle("is-hidden", !show);
+    // Decision + Entry type
+    var entryOn = section.values[9] === "yes";
 
-      if (s.type === "options") {
-        var currentOpt = section.subValues[s.parentIndex];
-        var optBtns = subLi.querySelectorAll(".btn-option");
-        optBtns.forEach(function (btn) {
-          var isActive = btn.dataset.opt === currentOpt;
-          btn.classList.toggle("active", isActive);
-          btn.setAttribute("aria-pressed", String(isActive));
-          btn.disabled = !show;   // only enabled while the parent is "yes"
-        });
-      } else {
-        var subVal = section.subValues[s.parentIndex];
-        var sYes = subLi.querySelector(".btn-check--yes");
-        var sNo  = subLi.querySelector(".btn-check--no");
-        var sIsYes = subVal === "yes";
-        var sIsNo  = subVal === "no";
+    var decisionLi = card.querySelector('.item--sub[data-entry-for="9"]');
+    if (decisionLi) {
+      decisionLi.classList.toggle("is-hidden", !entryOn);
+      decisionLi.querySelectorAll(".btn-option").forEach(function (btn) {
+        var isActive = btn.dataset.opt === section.decision;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-pressed", String(isActive));
+        btn.disabled = !entryOn;
+      });
+    }
 
-        sYes.classList.toggle("active", sIsYes);
-        sNo.classList.toggle("active", sIsNo);
-        sYes.setAttribute("aria-pressed", String(sIsYes));
-        sNo.setAttribute("aria-pressed", String(sIsNo));
-        sYes.disabled = sIsNo;
-        sNo.disabled  = sIsYes;
-      }
-    });
+    var entryTypeLi = card.querySelector('.item--sub[data-entry-type-for="9"]');
+    if (entryTypeLi) {
+      entryTypeLi.classList.toggle("is-hidden", !entryOn);
+      entryTypeLi.querySelectorAll(".btn-option").forEach(function (btn) {
+        var isActive = btn.dataset.opt === section.entryType;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-pressed", String(isActive));
+        btn.disabled = !entryOn;
+      });
+    }
+
+    // Result block
+    var resultLi = card.querySelector('.item--result[data-result-for="10"]');
+    if (resultLi) {
+      var show = resultVisible(section);
+      resultLi.classList.toggle("is-visible", show);
+      var profitBtn = resultLi.querySelector('[data-result="Profit"]');
+      var lossBtn   = resultLi.querySelector('[data-result="Lost"]');
+      var pActive = section.result === "Profit";
+      var lActive = section.result === "Lost";
+      profitBtn.classList.toggle("active", pActive);
+      lossBtn.classList.toggle("active", lActive);
+      profitBtn.setAttribute("aria-pressed", String(pActive));
+      lossBtn.setAttribute("aria-pressed", String(lActive));
+      profitBtn.disabled = !show;
+      lossBtn.disabled   = !show;
+    }
 
     // Counters
     var total = visibleTotal(section);
@@ -1205,13 +1380,13 @@
 
     var counter = card.querySelector("[data-count]");
     counter.textContent = done + " / " + total;
-    counter.classList.toggle("is-full", done === total);
+    counter.classList.toggle("is-full", done === total && total > 0);
 
     var tab = tabEls[id];
     if (tab) {
       var tabCountEl = tab.querySelector(".tab__count");
       if (tabCountEl) tabCountEl.textContent = done + "/" + total;
-      tab.classList.toggle("is-complete", done === total);
+      tab.classList.toggle("is-complete", done === total && total > 0);
     }
   }
 
@@ -1224,8 +1399,18 @@
     lines.push("Opened: " + formatOpened(section.openedAt));
     lines.push("");
 
-    section.values.forEach(function (val, i) {
-      var check = CHECKS[i];
+    CHECKS.forEach(function (check, i) {
+      if (check.isResult) {
+        if (section.values[9] === "yes") {
+          var resMark = section.result === "Profit" ? MARK.profit
+                      : section.result === "Lost"  ? MARK.lost
+                      : MARK.none;
+          lines.push((i + 1) + ". Result: Profit " + resMark);
+        }
+        return;
+      }
+
+      var val = section.values[i];
       var mark;
 
       if (check.type === "direction") {
@@ -1241,25 +1426,18 @@
       lines.push((i + 1) + ". " + check.text + " " + mark + (check.suffix || ""));
 
       if (check.sub && val === "yes") {
-        var sub = null;
-        for (var k = 0; k < SUBS.length; k++) {
-          if (SUBS[k].parentIndex === i) { sub = SUBS[k]; break; }
-        }
-        if (!sub) return;
-
         var subVal = section.subValues[i];
+        var subMark = subVal === "yes" ? MARK.yes
+                    : subVal === "no"  ? MARK.no
+                    : MARK.none;
+        lines.push("   " + (i + 1) + "a. " + check.sub + " " + subMark);
+      }
 
-        if (sub.type === "options") {
-          lines.push(
-            "   " + (i + 1) + "a. " + check.sub + ": " +
-            (typeof subVal === "string" && subVal ? subVal : "(not selected)")
-          );
-        } else {
-          var subMark = subVal === "yes" ? MARK.yes
-                      : subVal === "no"  ? MARK.no
-                      : MARK.none;
-          lines.push("   " + (i + 1) + "a. " + check.sub + " " + subMark);
-        }
+      if (check.subBuySell && val === "yes") {
+        var dec = section.decision || "(not selected)";
+        var et  = section.entryType || "(not selected)";
+        lines.push("   " + (i + 1) + "a. Decision: " + dec);
+        lines.push("   " + (i + 1) + "b. Entry type: " + et);
       }
     });
 
@@ -1269,7 +1447,6 @@
   function copyChecklist(id, btn) {
     var section = sectionsById[id];
     if (!section) return;
-
     var text = formatChecklist(section);
 
     copyToClipboard(text).then(function (ok) {
